@@ -46,7 +46,7 @@ qemu:
 	$(ESP_QEMU) -machine $(ARCH) -nographic -s -S -drive file=./qemu_flash.bin,if=mtd,format=raw 
 
 gdb: 
-	$(ESP_GDB) $(PROG).elf -ex "target remote :1234" -ex "tb _entry" -ex "tb _clear_bss" -ex "tb _end_clear_bss" -ex "c"
+	$(ESP_GDB) $(PROG).elf -ex "target remote :1234" -ex "tb call_start_cpu0"  -ex "c"
 
 flash: $(PROG).bin 
 	$(IDF_PYTHON) $(ESPTOOL) \
