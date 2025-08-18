@@ -18,7 +18,10 @@ CFLAGS      ?= -W -Wall -Wextra  -Wundef -Wshadow -pedantic \
                -g -Og -ffunction-sections -fdata-sections -std=gnu11  -Wno-enum-conversion -gdwarf-4 -ggdb\
                -I. -I./inc $(EXTRA_CFLAGS) 
 EXTRA_LINKFLAGS = 
-LINKFLAGS   ?= -T${LINKERSCRIPT} $(EXTRA_LINKFLAGS)  -nostdlib -nostartfiles -Wl,-Map=$@.map -Wl,--gc-sections -Wl,--cref -Wl,--no-warn-rwx-segments -Wl,--orphan-handling=warn 
+LINKFLAGS   ?= -T${LINKERSCRIPT} $(EXTRA_LINKFLAGS)  -nostdlib -Wl,-Map=$@.map -Wl,--gc-sections -Wl,--cref -Wl,--no-warn-rwx-segments 
+
+LDLIBS = -lc -lgcc
+
 ESP_TOOLCHAIN   ?= $(ESPRESSIF_PATH)/tools/riscv32-esp-elf/esp-14.2.0_20241119/riscv32-esp-elf/bin/riscv32-esp-elf
 ESP_GDB = $(ESPRESSIF_PATH)/tools/riscv32-esp-elf-gdb/16.2_20250324/riscv32-esp-elf-gdb/bin/riscv32-esp-elf-gdb
 # TOOLCHAIN   ?= riscv64-unknown-elf
@@ -32,7 +35,7 @@ all: clean build
 build: $(PROG).elf $(PROG).bin
 
 $(PROG).elf: $(SRCS)
-	$(ESP_TOOLCHAIN)-gcc  $(CFLAGS) $(SRCS) $(LINKFLAGS) -o $@
+	$(ESP_TOOLCHAIN)-gcc  $(CFLAGS) $(SRCS) $(LINKFLAGS) $(LDLIBS) -o $@
 
 $(PROG).bin: $(PROG).elf
 	$(ESP_TOOLCHAIN)-objcopy -O binary $(PROG).elf $(PROG).bin

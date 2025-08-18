@@ -61,6 +61,7 @@ int main(void) {
     printf("Blinking and rainbow...%d\n",initialized++);
     blink(3, 100);
     rainbow(2000);
+    blink(3, 300);
   }
 
   return(0);

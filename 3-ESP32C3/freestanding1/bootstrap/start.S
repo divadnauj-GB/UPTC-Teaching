@@ -45,10 +45,7 @@ _end_clear_bss:
 
     /* Set up the stack pointer */
     la sp,  __stack_top
-
-    // la      a0, __libc_fini_array   # Register global termination functions
-    //call    atexit                  #  to be called upon exit
-    //call    __libc_init_array       # Run global initialization functions
+    call    __libc_init_array       # Run global initialization functions
 
     call    syscalls_init
 
