@@ -1,4 +1,6 @@
-# These exercises were adapted to work with RISC-V QEMO, the original exercises were taken from the repository https://github.com/johnwinans/rvddt/tree/master of John Winans
+# Baremetal examples
+
+### These exercises were adapted to work with RISC-V QEMO, the original exercises were taken from the repository https://github.com/johnwinans/rvddt/tree/master of John Winans
 
 These illustrate an approach to initializing an address space suitable
 for running a C program that uses newlib.
