@@ -1,0 +1,229 @@
+
+Discarded input sections
+
+ .text          0x00000000        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .data          0x00000000        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .bss           0x00000000        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text          0x00000000        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+ .data          0x00000000        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+ .bss           0x00000000        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+ .text.sbrk     0x00000000       0x26 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+iache            0x4037c000         0x00004000         xrw
+iram             0x40380400         0x00008000         xrw
+dram             0x3fc88000         0x00020000         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+LOAD /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+                0x3fca8000                        _eram = (ORIGIN (dram) + LENGTH (dram))
+
+.text           0x40380400      0x33c
+ *(.text)
+ *(.text*)
+ .text.systick  0x40380400       0x20 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text.delay_us
+                0x40380420       0x52 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text.wdt_disable
+                0x40380472       0x5e /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text.gpio_output
+                0x403804d0       0x2e /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text.ws2812_show
+                0x403804fe       0x8e /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text.hueval   0x4038058c       0x52 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text.blink    0x403805de       0x5c /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text.rainbow  0x4038063a       0x48 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .text.main     0x40380682       0x34 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+                0x40380682                main
+ .text.soc_init
+                0x403806b6       0x38 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+ .text.call_start_cpu0
+                0x403806ee       0x4e /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+                0x403806ee                call_start_cpu0
+
+.data           0x3fc88000       0x90
+                0x3fc88000                        . = ALIGN (0x10)
+                0x3fc88000                        _sdata = .
+ *(.data)
+ *(.data*)
+ *(.sdata)
+ *(.sdata*)
+ *(.srodata)
+ *(.srodata*)
+ *(.rodata)
+ *(.rodata*)
+ .rodata.main.str1.4
+                0x3fc88000       0x1b /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ *(.gnu.linkonce.r.*)
+ *(.rodata1)
+ *(.riscv.*)
+ .riscv.attributes
+                0x3fc8801b       0x38 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .riscv.attributes
+                0x3fc88053       0x38 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+                0x3fc88090                        . = ALIGN (0x10)
+ *fill*         0x3fc8808b        0x5 
+                0x3fc88090                        _edata = .
+
+.rela.dyn       0x3fc88090        0x0
+ .rela.text.call_start_cpu0
+                0x3fc88090        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+
+.bss            0x3fc88090       0x10
+                0x3fc88090                        . = ALIGN (0x10)
+                0x3fc88090                        _sbss = .
+ *(.bss)
+ *(.bss*)
+ *(.sbss)
+ *(.sbss*)
+ .sbss.s_brk    0x3fc88090        0x4 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+ .sbss.s_heap_end
+                0x3fc88094        0x4 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+ .sbss.s_heap_start
+                0x3fc88098        0x4 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+ *(COMMON)
+                0x3fc880a0                        . = ALIGN (0x10)
+ *fill*         0x3fc8809c        0x4 
+                0x3fc880a0                        _ebss = .
+                0x3fc880a0                        . = ALIGN (0x10)
+                [!provide]                        PROVIDE (end = .)
+                0x3fc880a0                        PROVIDE (_end = .)
+                [!provide]                        PROVIDE (memset = 0x40000354)
+                [!provide]                        PROVIDE (memcpy = 0x40000358)
+                [!provide]                        PROVIDE (memmove = 0x4000035c)
+                [!provide]                        PROVIDE (memcmp = 0x40000360)
+                [!provide]                        PROVIDE (strcpy = 0x40000364)
+                [!provide]                        PROVIDE (strncpy = 0x40000368)
+                [!provide]                        PROVIDE (strcmp = 0x4000036c)
+                [!provide]                        PROVIDE (strncmp = 0x40000370)
+                [!provide]                        PROVIDE (strlen = 0x40000374)
+                [!provide]                        PROVIDE (strstr = 0x40000378)
+                [!provide]                        PROVIDE (bzero = 0x4000037c)
+                [!provide]                        PROVIDE (isalnum = 0x40000388)
+                [!provide]                        PROVIDE (isalpha = 0x4000038c)
+                [!provide]                        PROVIDE (isascii = 0x40000390)
+                [!provide]                        PROVIDE (isblank = 0x40000394)
+                [!provide]                        PROVIDE (iscntrl = 0x40000398)
+                [!provide]                        PROVIDE (isdigit = 0x4000039c)
+                [!provide]                        PROVIDE (islower = 0x400003a0)
+                [!provide]                        PROVIDE (isgraph = 0x400003a4)
+                [!provide]                        PROVIDE (isprint = 0x400003a8)
+                [!provide]                        PROVIDE (ispunct = 0x400003ac)
+                [!provide]                        PROVIDE (isspace = 0x400003b0)
+                [!provide]                        PROVIDE (isupper = 0x400003b4)
+                [!provide]                        PROVIDE (toupper = 0x400003b8)
+                [!provide]                        PROVIDE (tolower = 0x400003bc)
+                [!provide]                        PROVIDE (toascii = 0x400003c0)
+                [!provide]                        PROVIDE (memccpy = 0x400003c4)
+                [!provide]                        PROVIDE (memchr = 0x400003c8)
+                [!provide]                        PROVIDE (memrchr = 0x400003cc)
+                [!provide]                        PROVIDE (strcasecmp = 0x400003d0)
+                [!provide]                        PROVIDE (strcasestr = 0x400003d4)
+                [!provide]                        PROVIDE (strcat = 0x400003d8)
+                [!provide]                        PROVIDE (strdup = 0x400003dc)
+                [!provide]                        PROVIDE (strchr = 0x400003e0)
+                [!provide]                        PROVIDE (strcspn = 0x400003e4)
+                [!provide]                        PROVIDE (strcoll = 0x400003e8)
+                [!provide]                        PROVIDE (strlcat = 0x400003ec)
+                [!provide]                        PROVIDE (strlcpy = 0x400003f0)
+                [!provide]                        PROVIDE (strlwr = 0x400003f4)
+                [!provide]                        PROVIDE (strncasecmp = 0x400003f8)
+                [!provide]                        PROVIDE (strncat = 0x400003fc)
+                [!provide]                        PROVIDE (strndup = 0x40000400)
+                [!provide]                        PROVIDE (strnlen = 0x40000404)
+                [!provide]                        PROVIDE (strrchr = 0x40000408)
+                [!provide]                        PROVIDE (strsep = 0x4000040c)
+                [!provide]                        PROVIDE (strspn = 0x40000410)
+                [!provide]                        PROVIDE (strtok_r = 0x40000414)
+                [!provide]                        PROVIDE (strupr = 0x40000418)
+                [!provide]                        PROVIDE (longjmp = 0x4000041c)
+                [!provide]                        PROVIDE (setjmp = 0x40000420)
+                [!provide]                        PROVIDE (abs = 0x40000424)
+                [!provide]                        PROVIDE (div = 0x40000428)
+                [!provide]                        PROVIDE (labs = 0x4000042c)
+                [!provide]                        PROVIDE (ldiv = 0x40000430)
+                [!provide]                        PROVIDE (qsort = 0x40000434)
+                [!provide]                        PROVIDE (rand_r = 0x40000438)
+                [!provide]                        PROVIDE (rand = 0x4000043c)
+                [!provide]                        PROVIDE (srand = 0x40000440)
+                [!provide]                        PROVIDE (utoa = 0x40000444)
+                [!provide]                        PROVIDE (itoa = 0x40000448)
+                [!provide]                        PROVIDE (atoi = 0x4000044c)
+                [!provide]                        PROVIDE (atol = 0x40000450)
+                [!provide]                        PROVIDE (strtol = 0x40000454)
+                [!provide]                        PROVIDE (strtoul = 0x40000458)
+                0x40000040                        PROVIDE (printf = 0x40000040)
+                [!provide]                        PROVIDE (__udivdi3 = 0x400008ac)
+                [!provide]                        PROVIDE (__umoddi3 = 0x400008bc)
+                [!provide]                        PROVIDE (uart_tx_one_char = 0x40000068)
+                [!provide]                        PROVIDE (uart_tx_one_char2 = 0x4000006c)
+                [!provide]                        PROVIDE (uart_rx_one_char = 0x40000070)
+                [!provide]                        PROVIDE (uart_rx_one_char_block = 0x40000074)
+                [!provide]                        PROVIDE (uart_rx_readbuff = 0x40000078)
+                [!provide]                        PROVIDE (__divdi3 = 0x400007b4)
+OUTPUT(firmware.elf elf32-littleriscv)
+
+.debug_info     0x00000000      0x847
+ .debug_info    0x00000000      0x6a2 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .debug_info    0x000006a2      0x1a5 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.debug_abbrev   0x00000000      0x38b
+ .debug_abbrev  0x00000000      0x266 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .debug_abbrev  0x00000266      0x125 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.debug_loc      0x00000000      0x425
+ .debug_loc     0x00000000      0x3b1 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .debug_loc     0x000003b1       0x74 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.debug_aranges  0x00000000       0x90
+ .debug_aranges
+                0x00000000       0x60 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .debug_aranges
+                0x00000060       0x30 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.debug_ranges   0x00000000       0xd0
+ .debug_ranges  0x00000000       0xb0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .debug_ranges  0x000000b0       0x20 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.debug_line     0x00000000      0xa9c
+ .debug_line    0x00000000      0x842 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .debug_line    0x00000842      0x25a /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.debug_str      0x00000000      0x2e6
+ .debug_str     0x00000000      0x2e6 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+                                0x2c0 (size before relaxing)
+ .debug_str     0x000002e6      0x1fc /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.comment        0x00000000       0x2f
+ .comment       0x00000000       0x2f /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+                                 0x30 (size before relaxing)
+ .comment       0x0000002f       0x30 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.note.GNU-stack
+                0x00000000        0x0
+ .note.GNU-stack
+                0x00000000        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .note.GNU-stack
+                0x00000000        0x0 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+.debug_frame    0x00000000      0x148
+ .debug_frame   0x00000000       0xf4 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+ .debug_frame   0x000000f4       0x54 /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+
+Cross Reference Table
+
+Symbol                                            File
+_ebss                                             /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+_end                                              /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+_eram                                             /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+_sbss                                             /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+call_start_cpu0                                   /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+main                                              /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+                                                  /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
+printf                                            /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//ccXaohTr.o
+sbrk                                              /var/folders/l_/vt9g8tks2y9_2tf41207rc780000gn/T//cchdzlTh.o
