@@ -25,6 +25,7 @@ filesets:
     - '>=::mt48lc16m16a2:0'
     - ::vlog_tb_utils:1.0
     - ::wb_bfm:1.0
+    - '>=::elf-loader:0'
     file_type: verilogSource
     files:
     - bench/picorv32_wb_soc_tb.v
