@@ -1,0 +1,18 @@
+CAPI=2:
+description: Wire delay Verilog model
+filesets:
+  verilog_tb_src_files:
+    file_type: verilogSource
+    files:
+    - verilog/wiredelay.v
+name: ::wiredelay:0
+targets:
+  default:
+    filesets:
+    - verilog_tb_src_files
+  sim:
+    filesets:
+    - verilog_src_files
+    - verilog_tb_src_files
+    - verilog_tb_private_src_files
+    toplevel: orpsoc_tb

@@ -1,0 +1,291 @@
+version: 0.2.1
+name: de10-nano-picorv32-wb-soc_0
+toplevel: de10_nano_picorv32_wb_soc
+dependencies:
+  ::altera_clkgen:0: []
+  ::gpio:0: []
+  ::or1k_bootloaders:0.9: []
+  ::picorv32:0: []
+  ::riscv-nmon:0: []
+  ::uart16550:1.5.5-r1: []
+  ::verilog-arbiter:0-r1: []
+  ::verilog_utils:0: []
+  ::wb_common:0: []
+  ::wb_sdram_ctrl:0-r4: []
+  ::wb_spimemio:0: []
+  ::wb_intercon:1.0:
+  - ::verilog-arbiter:0-r1
+  - ::verilog_utils:0
+  - ::wb_common:0
+  ::wb_ram:1.0:
+  - ::wb_common:0
+  ::picorv32-wb-soc:0:
+  - ::gpio:0
+  - ::or1k_bootloaders:0.9
+  - ::picorv32:0
+  - ::riscv-nmon:0
+  - ::uart16550:1.5.5-r1
+  - ::wb_intercon:1.0
+  - ::wb_ram:1.0
+  - ::wb_sdram_ctrl:0-r4
+  - ::wb_spimemio:0
+  ::de10-nano-picorv32-wb-soc:0:
+  - ::altera_clkgen:0
+  - ::picorv32-wb-soc:0
+  - ::riscv-nmon:0
+cores:
+  ::altera_clkgen:0:
+    core_file: ../../../cores/altera_clkgen/altera_clkgen.core
+    dependencies: []
+  ::gpio:0:
+    core_file: ../../../cores/gpio/gpio.core
+    dependencies: []
+  ::or1k_bootloaders:0.9:
+    core_file: ../../../cores/or1k_bootloaders/or1k_bootloaders-0.9.core
+    dependencies: []
+  ::picorv32:0:
+    core_file: ../../../cores/picorv32/picorv32.core
+    dependencies: []
+  ::riscv-nmon:0:
+    core_file: ../../../cores/riscv-nmon/riscv-nmon.core
+    dependencies: []
+  ::uart16550:1.5.5-r1:
+    core_file: ../../../cores/uart16550/uart16550-1.5.5-r1.core
+    dependencies: []
+  ::verilog-arbiter:0-r1:
+    core_file: ../../../cores/verilog-arbiter/verilog-arbiter-r1.core
+    dependencies: []
+  ::verilog_utils:0:
+    core_file: ../../../cores/verilog_utils/verilog_utils.core
+    dependencies: []
+  ::wb_common:0:
+    core_file: ../../../cores/wb_common/wb_common.core
+    dependencies: []
+  ::wb_sdram_ctrl:0-r4:
+    core_file: ../../../cores/wb_sdram_ctrl/wb_sdram_ctrl-r4.core
+    dependencies: []
+  ::wb_spimemio:0:
+    core_file: ../../../cores/wb_spimemio/wb_spimemio.core
+    dependencies: []
+  ::wb_intercon:1.0:
+    core_file: ../../../cores/wb_intercon/wb_intercon-1.0.core
+    dependencies:
+    - ::verilog-arbiter:0-r1
+    - ::verilog_utils:0
+    - ::wb_common:0
+  ::wb_ram:1.0:
+    core_file: ../../../cores/wb_ram/wb_ram-1.0.core
+    dependencies:
+    - ::wb_common:0
+  ::picorv32-wb-soc:0:
+    core_file: ../../../cores/picorv32-wb-soc/picorv32-wb-soc.core
+    dependencies:
+    - ::gpio:0
+    - ::or1k_bootloaders:0.9
+    - ::picorv32:0
+    - ::riscv-nmon:0
+    - ::uart16550:1.5.5-r1
+    - ::wb_intercon:1.0
+    - ::wb_ram:1.0
+    - ::wb_sdram_ctrl:0-r4
+    - ::wb_spimemio:0
+  ::de10-nano-picorv32-wb-soc:0:
+    core_file: ../../../cores/de10-nano/de10-nano-picorv32-wb-soc.core
+    dependencies:
+    - ::altera_clkgen:0
+    - ::picorv32-wb-soc:0
+    - ::riscv-nmon:0
+parameters:
+  axi_test:
+    datatype: bool
+    paramtype: plusarg
+    description: Randomize AXI delays
+  verbose:
+    datatype: bool
+    paramtype: plusarg
+    description: Enable verbose memory logging
+  transactions:
+    datatype: int
+    paramtype: plusarg
+    description: Number of wishbone transactions to run in test bench
+tool_options:
+  quartus:
+    family: Cyclone V
+    device: 5CSEBA6U23I7
+    quartus_options:
+    - --64bit
+filters: []
+flow_options: {}
+hooks: {}
+files:
+- file_type: verilogSource
+  name: src/altera_clkgen_0/wrapped_altpll.v
+  core: ::altera_clkgen:0
+- file_type: verilogSource
+  name: src/altera_clkgen_0/altpll_wb_clkgen.v
+  core: ::altera_clkgen:0
+- file_type: verilogSource
+  name: src/altera_clkgen_0/wrapped_altera_pll.v
+  core: ::altera_clkgen:0
+- file_type: verilogSource
+  name: src/altera_clkgen_0/altera_pll_wb_clkgen.v
+  core: ::altera_clkgen:0
+- file_type: verilogSource
+  name: src/gpio_0/gpio.v
+  core: ::gpio:0
+- file_type: verilogSource
+  is_include_file: true
+  name: src/or1k_bootloaders_0.9/boot_loop.vh
+  core: ::or1k_bootloaders:0.9
+- file_type: verilogSource
+  is_include_file: true
+  name: src/or1k_bootloaders_0.9/clear_r3_and_jump_to_0x100.vh
+  core: ::or1k_bootloaders:0.9
+- file_type: verilogSource
+  is_include_file: true
+  name: src/or1k_bootloaders_0.9/led_blink.vh
+  core: ::or1k_bootloaders:0.9
+- file_type: verilogSource
+  is_include_file: true
+  name: src/or1k_bootloaders_0.9/spi_uimage_loader.vh
+  core: ::or1k_bootloaders:0.9
+- file_type: verilogSource
+  name: src/or1k_bootloaders_0.9/wb_bootrom.v
+  core: ::or1k_bootloaders:0.9
+- file_type: verilogSource
+  name: src/picorv32_0/axi4_memory.v
+  core: ::picorv32:0
+- file_type: verilogSource
+  name: src/picorv32_0/picorv32.v
+  core: ::picorv32:0
+- file_type: verilogSource
+  name: src/picorv32_0/picorv32_top.v
+  core: ::picorv32:0
+- file_type: cppSource
+  name: src/picorv32_0/picorv32_tb.cpp
+  core: ::picorv32:0
+- file_type: verilogSource
+  is_include_file: true
+  name: src/riscv-nmon_0/nmon_picorv32-wb-soc_10MHz_9600.txt
+  core: ::riscv-nmon:0
+- file_type: verilogSource
+  is_include_file: true
+  name: src/riscv-nmon_0/nmon_picorv32-wb-soc_24MHz_115200.txt
+  core: ::riscv-nmon:0
+- file_type: verilogSource
+  is_include_file: true
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_defines.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/raminfr.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_receiver.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_regs.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_rfifo.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_sync_flops.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_tfifo.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_top.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_transmitter.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/uart16550_1.5.5-r1/rtl/verilog/uart_wb.v
+  core: ::uart16550:1.5.5-r1
+- file_type: verilogSource
+  name: src/verilog-arbiter_0-r1/src/arbiter.v
+  core: ::verilog-arbiter:0-r1
+- file_type: verilogSource
+  is_include_file: true
+  name: src/verilog_utils_0/verilog_utils.vh
+  core: ::verilog_utils:0
+- file_type: verilogSource
+  is_include_file: true
+  name: src/wb_common_0/wb_common_params.v
+  core: ::wb_common:0
+- file_type: verilogSource
+  is_include_file: true
+  name: src/wb_common_0/wb_common.v
+  core: ::wb_common:0
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/wb_port_arbiter.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/bufram.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/dpram_altera.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/dpram_ecp5.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/dpram_generic.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/dual_clock_fifo.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/sdram_ctrl.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/wb_port.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_sdram_ctrl_0-r4/rtl/verilog/wb_sdram_ctrl.v
+  core: ::wb_sdram_ctrl:0-r4
+- file_type: verilogSource
+  name: src/wb_spimemio_0/wb_spimemio.v
+  core: ::wb_spimemio:0
+- file_type: verilogSource
+  name: src/wb_spimemio_0/spiflash.v
+  core: ::wb_spimemio:0
+- file_type: verilogSource
+  name: src/wb_intercon_1.0/rtl/verilog/wb_arbiter.v
+  core: ::wb_intercon:1.0
+- file_type: verilogSource
+  name: src/wb_intercon_1.0/rtl/verilog/wb_data_resize.v
+  core: ::wb_intercon:1.0
+- file_type: verilogSource
+  name: src/wb_intercon_1.0/rtl/verilog/wb_upsizer.v
+  core: ::wb_intercon:1.0
+- file_type: verilogSource
+  name: src/wb_intercon_1.0/rtl/verilog/wb_mux.v
+  core: ::wb_intercon:1.0
+- file_type: verilogSource
+  name: src/wb_ram_1.0/rtl/verilog/wb_ram.v
+  core: ::wb_ram:1.0
+- file_type: verilogSource
+  is_include_file: true
+  name: src/picorv32-wb-soc_0/rtl/verilog/wb_intercon/wb_intercon.vh
+  core: ::picorv32-wb-soc:0
+- file_type: verilogSource
+  name: src/picorv32-wb-soc_0/rtl/verilog/picorv32-wb-soc.v
+  core: ::picorv32-wb-soc:0
+- file_type: verilogSource
+  name: src/picorv32-wb-soc_0/rtl/verilog/wb_intercon/wb_intercon.v
+  core: ::picorv32-wb-soc:0
+- file_type: verilogSource
+  name: src/de10-nano-picorv32-wb-soc_0/rtl/verilog/de10-nano_picorv32_wb_soc.v
+  core: ::de10-nano-picorv32-wb-soc:0
+- file_type: tclSource
+  name: src/de10-nano-picorv32-wb-soc_0/data/de10-nano-pinmap.tcl
+  core: ::de10-nano-picorv32-wb-soc:0
+- file_type: tclSource
+  name: src/de10-nano-picorv32-wb-soc_0/data/options.tcl
+  core: ::de10-nano-picorv32-wb-soc:0
+- file_type: SDC
+  name: src/de10-nano-picorv32-wb-soc_0/data/de10-nano.sdc
+  core: ::de10-nano-picorv32-wb-soc:0
+vpi: []

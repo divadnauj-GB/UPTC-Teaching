@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="de1-picorv32-wb-soc_0">
+		<CBX_INST_ENTRY INSTANCE_NAME="|de1_picorv32_wb_soc|picorv32_wb_soc:soc|picorv32_wb:picorv32_wb|picorv32:picorv32_core|altsyncram:cpuregs_rtl_1" CBX_FILE_NAME="altsyncram_v8h1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|de1_picorv32_wb_soc|picorv32_wb_soc:soc|uart_top:uart16550|uart_regs:regs|uart_receiver:receiver|uart_rfifo:fifo_rx|raminfr:rfifo|altsyncram:ram_rtl_0" CBX_FILE_NAME="altsyncram_0nf1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|de1_picorv32_wb_soc|picorv32_wb_soc:soc|uart_top:uart16550|uart_regs:regs|uart_transmitter:transmitter|uart_tfifo:fifo_tx|raminfr:tfifo|altsyncram:ram_rtl_0" CBX_FILE_NAME="altsyncram_0nf1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|de1_picorv32_wb_soc|picorv32_wb_soc:soc|wb_sdram_ctrl:wb_sdram_ctrl0|wb_port_arbiter:wb_port_arbiter|wb_port:wbports[1].wb_port|bufram:bufram|dpram_altera:dpram_altera.dpram_altera|altsyncram:altsyncram_component" CBX_FILE_NAME="altsyncram_urv1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|de1_picorv32_wb_soc|picorv32_wb_soc:soc|picorv32_wb:picorv32_wb|picorv32:picorv32_core|altsyncram:cpuregs_rtl_0" CBX_FILE_NAME="altsyncram_v8h1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|de1_picorv32_wb_soc|picorv32_wb_soc:soc|wb_bootrom:bootrom|altsyncram:mem_rtl_0" CBX_FILE_NAME="altsyncram_pnb1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|de1_picorv32_wb_soc|picorv32_wb_soc:soc|wb_ram:sram0|wb_ram_altsyncram:wb_ram_altsyncram.ram0|altsyncram:altsyncram0" CBX_FILE_NAME="altsyncram_dsf1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|de1_picorv32_wb_soc|picorv32_wb_soc:soc|wb_sdram_ctrl:wb_sdram_ctrl0|wb_port_arbiter:wb_port_arbiter|wb_port:wbports[0].wb_port|bufram:bufram|dpram_altera:dpram_altera.dpram_altera|altsyncram:altsyncram_component" CBX_FILE_NAME="altsyncram_urv1.tdf"/>
+	</PROJECT>
+</LOG_ROOT>

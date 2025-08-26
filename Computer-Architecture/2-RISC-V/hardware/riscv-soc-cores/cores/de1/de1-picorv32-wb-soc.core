@@ -1,0 +1,46 @@
+CAPI=2:
+
+name: ::de1-picorv32-wb-soc:0
+
+filesets:
+  verilog_src_files:
+    depend:
+    - ::altera_clkgen:0
+    - ::picorv32-wb-soc:0
+    - ::riscv-nmon:0
+    file_type: verilogSource
+    files:
+    - rtl/verilog/de1_picorv32_wb_soc.v
+  tcl_scripts:
+    file_type: tclSource
+    files:
+    - data/de1-pinmap.tcl
+    - data/options.tcl
+  sdc_scripts:
+    file_type: SDC
+    files:
+    - data/de1.sdc
+
+targets:
+  default:
+    filesets:
+    - verilog_src_files
+    - tcl_scripts
+    - sdc_scripts
+    tools:
+      quartus:
+        family: Cyclone II
+        device: EP2C20F484C7
+    toplevel: de1_picorv32_wb_soc
+  fpga:
+    filesets:
+    - verilog_src_files
+    - tcl_scripts
+    - sdc_scripts
+    tools:
+      quartus:
+        family: Cyclone II
+        device: EPC20F484C7
+    toplevel: de1_picorv32_wb_soc
+    
+

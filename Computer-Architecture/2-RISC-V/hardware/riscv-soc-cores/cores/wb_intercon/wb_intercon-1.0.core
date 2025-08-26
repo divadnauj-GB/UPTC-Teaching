@@ -1,0 +1,57 @@
+CAPI=2:
+description: Wishbone Bus Interconnect utilities
+filesets:
+  verilog_src_files:
+    depend:
+    - ::verilog-arbiter:0-r1
+    - '>=::verilog_utils:0'
+    - '>=::wb_common:0'
+    file_type: verilogSource
+    files:
+    - rtl/verilog/wb_arbiter.v
+    - rtl/verilog/wb_data_resize.v
+    - rtl/verilog/wb_upsizer.v
+    - rtl/verilog/wb_mux.v
+  verilog_tb_private_src_files:
+    depend:
+    - ::vlog_tb_utils:1.0
+    - ::wb_bfm:1.0
+    file_type: verilogSource
+    files:
+    - bench/wb_mux_tb.v
+    - bench/wb_arbiter_tb.v
+    - bench/wb_upsizer_tb.v
+    - bench/wb_intercon_tb.v
+name: ::wb_intercon:1.0
+parameters:
+  transactions:
+    datatype: int
+    description: Number of wishbone transactions to run in test bench
+    paramtype: plusarg
+    scope: private
+provider:
+  name: github
+  patches: []
+  repo: wb_intercon
+  user: olofk
+  version: v1.0
+targets:
+  default:
+    filesets:
+    - verilog_src_files
+    parameters:
+    - transactions
+  sim:
+    default_tool: icarus
+    filesets:
+    - verilog_src_files
+    - verilog_tb_src_files
+    - verilog_tb_private_src_files
+    parameters:
+    - transactions
+    toplevel: wb_intercon_tb
+  synth:
+    filesets:
+    - verilog_src_files
+    parameters:
+    - transactions

@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "gdb",
+            "gdbpath": "riscv64-elf-gdb",
+            "request": "attach",
+            "name": "Attach to QEMU",
+            "executable": "${workspaceFolder}/myos.elf",
+            "target": ":1234",
+            "remote": true,
+            "cwd": "${workspaceRoot}",
+            "valuesFormatting": "parseText",
+        },
+
+        {"type": "espidf",
+        "name": "Launch",
+        "request": "launch"
+    }
+
+        
+       
+
+    ]
+}

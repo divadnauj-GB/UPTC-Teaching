@@ -1,0 +1,76 @@
+CAPI=2:
+description: PicoRV32 - A Size-Optimized RISC-V CPU
+filesets:
+  verilator_src_files:
+    file_type: cppSource
+    files:
+    - picorv32_tb.cpp
+  verilator_tb_toplevel:
+    file_type: cppSource
+    files:
+    - picorv32_tb.cpp
+  verilog_src_files:
+    file_type: verilogSource
+    files:
+    - axi4_memory.v
+    - picorv32.v
+    - picorv32_top.v
+  verilog_tb_private_src_files:
+    depend:
+    - '>=::elf-loader:0'
+    - ::vlog_tb_utils:1.0
+    file_type: verilogSource
+    files:
+    - testbench.v
+name: ::picorv32:0
+parameters:
+  axi_test:
+    datatype: bool
+    description: Randomize AXI delays
+    paramtype: plusarg
+    scope: private
+  verbose:
+    datatype: bool
+    description: Enable verbose memory logging
+    paramtype: plusarg
+    scope: private
+provider:
+  name: github
+  repo: picorv32
+  user: YosysHQ
+  version : v1.0
+targets:
+  default:
+    filesets:
+    - verilog_src_files
+    - verilator_src_files
+    parameters:
+    - axi_test
+    - verbose
+  sim:
+    default_tool: icarus
+    filesets:
+    - verilog_src_files
+    - verilog_tb_src_files
+    - verilog_tb_private_src_files
+    parameters:
+    - axi_test
+    - verbose
+    toplevel: testbench
+  synth:
+    default_tool: verilator
+    filesets:
+    - verilog_src_files
+    - verilator_src_files
+    - verilator_tb_toplevel
+    parameters:
+    - axi_test
+    - verbose
+    tools:
+      verilator:
+        cli_parser: passthrough
+        mode: cc
+        verilator_options:
+        - -Wno-fatal
+        - --trace
+    toplevel: picorv32_top

@@ -1,0 +1,31 @@
+CAPI=2:
+description: Verilog arbiter
+filesets:
+  verilog_src_files:
+    file_type: verilogSource
+    files:
+    - src/arbiter.v
+  verilog_tb_private_src_files:
+    file_type: verilogSource
+    files:
+    - src/arbiter_tb.v
+name: ::verilog-arbiter:0-r1
+provider:
+  name: github
+  patches: []
+  repo: verilog-arbiter
+  user: bmartini
+  version: b79f89e17f0be3b70a513c1a0b456f734a79273a
+targets:
+  default:
+    filesets:
+    - verilog_src_files
+  sim:
+    filesets:
+    - verilog_src_files
+    - verilog_tb_src_files
+    - verilog_tb_private_src_files
+    toplevel: orpsoc_tb
+  synth:
+    filesets:
+    - verilog_src_files
