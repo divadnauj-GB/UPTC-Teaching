@@ -1,0 +1,50 @@
+CAPI=2:
+
+name: ::de10-nano-nanorv32-wb-soc:0
+
+filesets:
+  verilog_src_files:
+    depend:
+    - ::altera_clkgen:0
+    - ::nanorv32-wb-soc:0
+    - ::riscv-nmon:0
+    file_type: verilogSource
+    files:
+    - rtl/verilog/de10-nano_nanorv32_wb_soc.v
+  tcl_scripts:
+    file_type: tclSource
+    files:
+    - data/de10-nano-pinmap.tcl
+    - data/options.tcl
+  sdc_scripts:
+    file_type: SDC
+    files:
+    - data/de10-nano.sdc
+
+targets:
+  default:
+    filesets:
+    - verilog_src_files
+    - tcl_scripts
+    - sdc_scripts
+    tools:
+      quartus:
+        family: "Cyclone V"
+        device: 5CSEBA6U23I7
+        quartus_options:
+        - --64bit
+    toplevel: de10_nano_nanorv32_wb_soc
+  fpga:
+    filesets:
+    - verilog_src_files
+    - tcl_scripts
+    - sdc_scripts
+    tools:
+      quartus:
+        family: "Cyclone V"
+        device: 5CSEBA6U23I7
+        quartus_options:
+        - --64bit
+    toplevel: de10_nano_nanorv32_wb_soc
+    
+

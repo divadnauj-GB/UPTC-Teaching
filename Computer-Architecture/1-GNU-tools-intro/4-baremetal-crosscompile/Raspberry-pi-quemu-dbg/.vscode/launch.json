@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "gdb",
+            "gdbpath": "arm-none-eabi-gdb",
+            "request": "attach",
+            "name": "attach to RPI2b",
+            "executable": "${workspaceFolder}/myos.elf",
+            "target": ":1234",
+            "remote": true,
+            "cwd": "${workspaceRoot}",
+            "valuesFormatting": "parseText",
+        },
+        {
+            "type": "gdb",
+            "gdbpath": "aarch64-elf-gdb",
+            "request": "attach",
+            "name": "attach to RPI4",
+            "executable": "${workspaceFolder}/myos.elf",
+            "target": ":1234",
+            "remote": true,
+            "cwd": "${workspaceRoot}",
+            "valuesFormatting": "parseText",
+        },
+    ],
+    
+}

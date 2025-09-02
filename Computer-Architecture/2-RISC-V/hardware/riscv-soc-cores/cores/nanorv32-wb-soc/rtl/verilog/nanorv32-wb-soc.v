@@ -1,6 +1,6 @@
 `default_nettype none
 
-module picorv32_wb_soc #(
+module nanorv32_wb_soc #(
 	parameter SIM = 0,
 	parameter PROGADDR_RESET = 32'h 0000_0000,
 	parameter BOOTROM_MEMFILE = "",
@@ -214,26 +214,26 @@ module picorv32_wb_soc #(
 		.wb_rst		(wb_rst)
 	);
 
-	picorv32_wb #(
+	nanorv32_wb #(
 		.PROGADDR_RESET (PROGADDR_RESET),
 		.COMPRESSED_ISA (0),
 		.ENABLE_MUL (1),
 		.ENABLE_DIV (1)
 	)
-	picorv32_wb (
+	nanorv32_wb (
 		.wb_clk_i(wb_clk),
 		.wb_rst_i(wb_rst),
 
-		.wbm_adr_o(wb_m2s_picorv32_adr),
-		.wbm_dat_i(wb_s2m_picorv32_dat),
-		.wbm_stb_o(wb_m2s_picorv32_stb),
-		.wbm_ack_i(wb_s2m_picorv32_ack),
-		.wbm_cyc_o(wb_m2s_picorv32_cyc),
-		.wbm_dat_o(wb_m2s_picorv32_dat),
-		.wbm_we_o(wb_m2s_picorv32_we),
-		.wbm_sel_o(wb_m2s_picorv32_sel)
+		.wbm_adr_o(wb_m2s_nanorv32_adr),
+		.wbm_dat_i(wb_s2m_nanorv32_dat),
+		.wbm_stb_o(wb_m2s_nanorv32_stb),
+		.wbm_ack_i(wb_s2m_nanorv32_ack),
+		.wbm_cyc_o(wb_m2s_nanorv32_cyc),
+		.wbm_dat_o(wb_m2s_nanorv32_dat),
+		.wbm_we_o(wb_m2s_nanorv32_we),
+		.wbm_sel_o(wb_m2s_nanorv32_sel)
 	);
-	assign wb_m2s_picorv32_cti = CTI_CLASSIC;
+	assign wb_m2s_nanorv32_cti = CTI_CLASSIC;
 
-	assign wb_iadr_o = wb_m2s_picorv32_adr;
+	assign wb_iadr_o = wb_m2s_nanorv32_adr;
 endmodule

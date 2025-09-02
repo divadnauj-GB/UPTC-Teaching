@@ -15,19 +15,24 @@
 // x4 -> 32 bit kernel entry point, _start location
 _start:
     // set stack before our code
+    mrs     x1, mpidr_el1
+    and     x1, x1, #3
+    cbz     x1, 2f
+    b halt
+2:  // primary core
     ldr     x5, =_start
     mov     sp, x5
 
     // clear bss
     ldr     x5, =__bss_start
     ldr     w6, =__bss_size
-1:  cbz     w6, 2f
+1:  cbz     w6, 3f
     str     xzr, [x5], #8
     sub     w6, w6, #1
     cbnz    w6, 1b
 
     // jump to C code, should not return
-2:  bl      kernel_main
+3:  bl      kernel_main
     // for failsafe, halt this core
 halt:
     wfe

@@ -1,4 +1,4 @@
-module de10_nano_picorv32_wb_soc(
+module de10_nano_nanorv32_wb_soc(
 	input CLOCK_50,
 	input [1:0] KEY,
 	input [3:0] SW,
@@ -58,10 +58,10 @@ module de10_nano_picorv32_wb_soc(
 	//assign gpio0_i[1] = spi0_miso;
 	assign gpio0_i[7:2] = {SW[3:0],~KEY[1],~KEY[0]};
 
-	picorv32_wb_soc #(
+	nanorv32_wb_soc #(
 		.PROGADDR_RESET (32'h 0000_0000),
 
-		.BOOTROM_MEMFILE ("./src/riscv-nmon_0/nmon_picorv32-wb-soc_24MHz_115200.txt"),
+		.BOOTROM_MEMFILE ("./src/riscv-nmon_0/nmon_nanorv32-wb-soc_24MHz_115200.txt"),
 		.BOOTROM_MEMDEPTH (1024)
 	)
 	soc(
