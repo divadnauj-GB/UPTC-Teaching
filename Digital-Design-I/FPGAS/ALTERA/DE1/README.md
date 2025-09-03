@@ -22,4 +22,15 @@ make all
 ```
 
 ### FPGA device programming using USB blaster on Linux devices
-TODO
+
+- check that the device is connected properly
+```bash
+./jtagconfig
+1) USB-Blaster [1-2]
+031050DD 10M50DA(.|ES)/10M50DC
+```
+
+- Program the device using the `*.sof` file
+```bash
+quartus_pgm  -m jtag -o "p;de1_basic_project.sof" 
+```

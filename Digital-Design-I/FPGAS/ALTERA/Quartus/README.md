@@ -137,4 +137,5 @@ Restart your computer
 
 You can verify that you are able to program your Board by disconnecting and reconnecting it to your computer and running `./jtagconfig` in the same terminal you ran the above commands. If your setup is correct, you should see output that looks like:
 1) USB-Blaster [1-2]
+
 031050DD 10M50DA(.|ES)/10M50DC
