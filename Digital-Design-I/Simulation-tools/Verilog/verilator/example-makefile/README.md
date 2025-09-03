@@ -5,7 +5,7 @@ This example shows how to automate the simulation process of verilog files with 
 In a terminal you can simply type the following: 
 
 ```bash
-make compile # build the simulation executable *.vpp
+make compile # build the simulation executable 
 make test # This commands runs the simulation automatically
 make wave # opens the waveforms using GTKWave
 make clean # clean all gerated files from the directory
