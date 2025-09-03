@@ -1,11 +1,14 @@
-ESPRESSIF_PATH = /Users/juand/.espressif
-IDF_PATH = /Users/juand/esp/v5.5/esp-idf
-PORT = /dev/tty.usbserial-2140
-BAUD = 115200
+ESPRESSIF_PATH=~/.espressif
+IDF_PATH=~/esp/v5.5/esp-idf
+GCC_VERSION=14.2.0_20241119
+GDB_VERSION=16.2_20250324
+ESP_QEMU_VERSION=develop_9.0.0_20240606
+PORT=/dev/tty.usbserial-2140
+BAUD=115200
 
 IDF_PYTHON = $(ESPRESSIF_PATH)/python_env/idf5.5_py3.13_env/bin/python
 ESPTOOL = $(IDF_PATH)/components/esptool_py/esptool/esptool.py
-ESP_QEMU = $(ESPRESSIF_PATH)/tools/qemu-riscv32/esp_develop_9.0.0_20240606/qemu/bin/qemu-system-riscv32
+ESP_QEMU = $(ESPRESSIF_PATH)/tools/qemu-riscv32/esp_$(ESP_QEMU_VERSION)/qemu/bin/qemu-system-riscv32
 PROG        ?= firmware
 ARCH        ?= esp32c3
 LINKERSCRIPT = ./ld/esp32c3.ld
@@ -22,8 +25,8 @@ LINKFLAGS   ?= -T${LINKERSCRIPT} $(EXTRA_LINKFLAGS)  -nostdlib -Wl,-Map=$@.map -
 
 LDLIBS = -lc -lgcc
 
-ESP_TOOLCHAIN   ?= $(ESPRESSIF_PATH)/tools/riscv32-esp-elf/esp-14.2.0_20241119/riscv32-esp-elf/bin/riscv32-esp-elf
-ESP_GDB = $(ESPRESSIF_PATH)/tools/riscv32-esp-elf-gdb/16.2_20250324/riscv32-esp-elf-gdb/bin/riscv32-esp-elf-gdb
+ESP_TOOLCHAIN   ?= $(ESPRESSIF_PATH)/tools/riscv32-esp-elf/esp-$(GCC_VERSION)/riscv32-esp-elf/bin/riscv32-esp-elf
+ESP_GDB = $(ESPRESSIF_PATH)/tools/riscv32-esp-elf-gdb/$(GDB_VERSION)/riscv32-esp-elf-gdb/bin/riscv32-esp-elf-gdb
 # TOOLCHAIN   ?= riscv64-unknown-elf
 
 ROOT = .
