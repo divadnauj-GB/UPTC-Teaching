@@ -100,8 +100,8 @@ Note also that the precise filenames shown above might have changed by the time 
 Run the bash script provided in this repository as follows:
 
 ```bash
-bash install-libpng32.sh <quartus root>/linux #<quartus root corresponds to the full path where quartus was installed e.g. /home/ubuntu/altera/13.0sp1/quartus>
-bash install-libpng64.sh <quartus root>/linux64 #<quartus root corresponds to the full path where quartus was installed e.g. /home/ubuntu/altera/13.0sp1/quartus>
+bash install-libpng32.sh <quartus root>/linux #<quartus root> corresponds to the full path where quartus was installed e.g. /home/ubuntu/altera/13.0sp1/quartus
+bash install-libpng64.sh <quartus root>/linux64 #<quartus root> corresponds to the full path where quartus was installed e.g. /home/ubuntu/altera/13.0sp1/quartus
 ```
 
 ### Export environmetal variables

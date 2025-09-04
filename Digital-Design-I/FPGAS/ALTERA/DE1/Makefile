@@ -22,9 +22,6 @@ asm: fit
 sta: asm
 	quartus_sta $(OPTIONS) $(NAME)
 
-dse: syn
-	quartus_dse $(NAME) $(DSE_OPTIONS)
-
 clean:
 	rm -rf *.qpf *.qsf db incremental_db output_files
 
