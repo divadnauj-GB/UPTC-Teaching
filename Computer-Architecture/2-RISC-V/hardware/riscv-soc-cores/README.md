@@ -7,6 +7,9 @@ The current repository has been proven on the Altera DE1 and DE10-nano boards.
 
 ## System architecture. 
 
+The minimal SoC is composed of a nanorv32 RISC-V processor interconected with several memoery mapped peripherals. The following figure depicts the addresable memory space for each peripheral. 
+
+![Image](./doc/image.png)
 
 
 ## Simulation:
@@ -34,3 +37,12 @@ fusesoc --cores-root cores/ run --build --tool quartus de1-nanorv32-wb-soc
 quartus_pgm  -m jtag -o "p;build/de1-nanorv32-wb-soc_0/default-quartus/de1-nanorv32-wb-soc_0.sof"
 ```
 
+## Booting a sw application using NMON 
+
+```bash
+cd sw/blink_led
+make clean nmon
+./nmon-loader.sh application.nmon /dev/ttyUSB 115200
+```
+
+if you want to terminate the terminal session after programming the SOC, press `~-` followed by the return key.
