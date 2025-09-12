@@ -1,25 +1,25 @@
 CAPI=2:
 
-name: ::de1-picorv32-wb-soc:0
+name: ::de10-nano-nanorv32-wb-soc-mtvec:0
 
 filesets:
   verilog_src_files:
     depend:
     - ::altera_clkgen:0
-    - ::picorv32-wb-soc:0
+    - ::nanorv32-wb-soc-mtvec:0
     - ::riscv-nmon:0
     file_type: verilogSource
     files:
-    - rtl/verilog/de1_picorv32_wb_soc.v
+    - rtl/verilog/de10-nano_nanorv32_wb_soc.v
   tcl_scripts:
     file_type: tclSource
     files:
-    - data/de1-pinmap.tcl
+    - data/de10-nano-pinmap.tcl
     - data/options.tcl
   sdc_scripts:
     file_type: SDC
     files:
-    - data/de1.sdc
+    - data/de10-nano.sdc
 
 targets:
   default:
@@ -29,9 +29,11 @@ targets:
     - sdc_scripts
     tools:
       quartus:
-        family: Cyclone II
-        device: EP2C20F484C7
-    toplevel: de1_picorv32_wb_soc
+        family: "Cyclone V"
+        device: 5CSEBA6U23I7
+        quartus_options:
+        - --64bit
+    toplevel: de10_nano_nanorv32_wb_soc
   fpga:
     filesets:
     - verilog_src_files
@@ -39,8 +41,10 @@ targets:
     - sdc_scripts
     tools:
       quartus:
-        family: Cyclone II
-        device: EP2C20F484C7
-    toplevel: de1_picorv32_wb_soc
+        family: "Cyclone V"
+        device: 5CSEBA6U23I7
+        quartus_options:
+        - --64bit
+    toplevel: de10_nano_nanorv32_wb_soc
     
 

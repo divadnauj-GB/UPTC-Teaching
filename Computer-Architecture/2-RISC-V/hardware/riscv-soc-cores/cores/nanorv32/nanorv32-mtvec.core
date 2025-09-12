@@ -1,0 +1,84 @@
+CAPI=2:
+description: nanorv32 - A Size-Optimized RISC-V CPU
+filesets:
+  verilator_src_files:
+    file_type: cppSource
+    files:
+    - nanorv32_tb.cpp
+  verilator_tb_toplevel:
+    file_type: cppSource
+    files:
+    - nanorv32_tb.cpp
+  verilog_src_files:
+    file_type: verilogSource
+    files:
+    - axi4_memory.v
+    - nanorv32_axi.v
+    - nanorv32.v
+    - picorv32_axi_adapter.v
+    - picorv32_pcpi_div.v
+    - picorv32_pcpi_fast_mul.v
+    - picorv32_pcpi_mul.v
+    - picorv32_regs.v
+    - nanorv32_timer.v
+    - nanorv32_core.v
+    - nanorv32_wb.v
+  verilog_tb_private_src_files:
+    depend:
+    - '>=::elf-loader:0'
+    - ::vlog_tb_utils:1.0
+    file_type: verilogSource
+    files:
+    - testbench.v
+name: ::nanorv32-mtvec:0
+parameters:
+  axi_test:
+    datatype: bool
+    description: Randomize AXI delays
+    paramtype: plusarg
+    scope: private
+  verbose:
+    datatype: bool
+    description: Enable verbose memory logging
+    paramtype: plusarg
+    scope: private
+provider:
+  name: github
+  repo: nanorv32
+  user: elvisfox
+  version : 925498debe1ce80853badb313770b74d5b8dd560
+targets:
+  default:
+    filesets:
+    - verilog_src_files
+    - verilator_src_files
+    parameters:
+    - axi_test
+    - verbose
+  sim:
+    default_tool: icarus
+    filesets:
+    - verilog_src_files
+    - verilog_tb_src_files
+    - verilog_tb_private_src_files
+    parameters:
+    - axi_test
+    - verbose
+    toplevel: testbench
+  synth:
+    default_tool: verilator
+    filesets:
+    - verilog_src_files
+    - verilator_src_files
+    - verilator_tb_toplevel
+    parameters:
+    - axi_test
+    - verbose
+    tools:
+      verilator:
+        cli_parser: passthrough
+        mode: cc
+        verilator_options:
+        - -Wno-fatal
+        - --trace
+    toplevel: nanorv32_top

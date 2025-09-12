@@ -40,7 +40,7 @@ targets:
     tools:
       quartus:
         family: Cyclone II
-        device: EPC20F484C7
+        device: EP2C20F484C7
     toplevel: de1_nanorv32_wb_soc
     
 

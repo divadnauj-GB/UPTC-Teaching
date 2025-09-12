@@ -60,7 +60,7 @@ module de10_nano_nanorv32_wb_soc(
 
 	nanorv32_wb_soc #(
 		.PROGADDR_RESET (32'h 0000_0000),
-
+		.PROGADDR_IRQ(32'h 0000_0010),
 		.BOOTROM_MEMFILE ("./src/riscv-nmon_0/nmon_nanorv32-wb-soc_24MHz_115200.txt"),
 		.BOOTROM_MEMDEPTH (1024)
 	)

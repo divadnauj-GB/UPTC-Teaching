@@ -33,16 +33,17 @@ fusesoc --cores-root cores/ run --build --tool quartus de1-nanorv32-wb-soc
 ## FPGA Program 
 
 ```bash
-./jtagconfig
+jtagconfig
 quartus_pgm  -m jtag -o "p;build/de1-nanorv32-wb-soc_0/default-quartus/de1-nanorv32-wb-soc_0.sof"
 ```
 
 ## Booting a sw application using NMON 
+For loading and booting your application with NMON you need to install `expect`, you can simply type `sudo apt install expect`. Then you can follow these intructions.
 
 ```bash
 cd sw/blink_led
 make clean nmon
-./nmon-loader.sh application.nmon /dev/ttyUSB 115200
+expect nmon-loader.sh application.nmon /dev/ttyUSB 115200
 ```
 
 if you want to terminate the terminal session after programming the SOC, press `~-` followed by the return key.

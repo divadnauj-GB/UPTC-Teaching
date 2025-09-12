@@ -40,7 +40,7 @@ application.elf: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LDLIBS) -o $@ 
 	/opt/riscv/bin/riscv64-unknown-elf-size -A -x $@
 
-START_ADDR := $(shell $(NM) *.elf | awk '/ _start/ {print $$1}')
+#START_ADDR := $(shell $(NM) *.elf | awk '/ _start/ {print $$1}')
 
 #xxd -e -c 4 -o 0x$(START_ADDR) -g 4 $< | sed "s/^/w/;s/: //;s/  .*//" > $@
 application.nmon: application.bin

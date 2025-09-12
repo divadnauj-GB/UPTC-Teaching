@@ -3,6 +3,7 @@
 module nanorv32_wb_soc #(
 	parameter SIM = 0,
 	parameter PROGADDR_RESET = 32'h 0000_0000,
+	parameter PROGADDR_IRQ = 32'h 0000_0010,
 	parameter BOOTROM_MEMFILE = "",
 	parameter BOOTROM_MEMDEPTH = 1024,
 
@@ -216,9 +217,12 @@ module nanorv32_wb_soc #(
 
 	nanorv32_wb #(
 		.PROGADDR_RESET (PROGADDR_RESET),
+		.PROGADDR_IRQ (PROGADDR_IRQ),
 		.COMPRESSED_ISA (0),
 		.ENABLE_MUL (1),
-		.ENABLE_DIV (1)
+		.ENABLE_DIV (1),
+		.MACHINE_ISA (1),
+		.ENABLE_IRQ_EXTERNAL (0)
 	)
 	nanorv32_wb (
 		.wb_clk_i(wb_clk),

@@ -10,7 +10,7 @@ test: program
 	./main
 
 
-debug: 
+debug: program
 	gdb ./main -ex "tb main" -ex "c"
 
 

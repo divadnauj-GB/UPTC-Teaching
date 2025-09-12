@@ -28,18 +28,35 @@
 #define DEBUG_LL_UART_BPS	115200
 #define DEBUG_LL_UART_DIVISOR	(DEBUG_LL_UART_CLK / DEBUG_LL_UART_BPS)
 
-
 #include "debug_ll_ns16550.h"
 
 #include "riscv_nmon.h"
 
-	.text
-	.align 2
-	.globl _start
-
+	.section .text.init
+	.global _start
 _start:
+	j reset
+
+.section .text.trap_vec
+.global trap_vec
+.align 4
+trap_vec:
+	wfi
+	j trap_vec
+
+.section .text.reset
+.global reset
+reset:
+	li a0, 0x00000010
+	csrw mtvec, a0
+	li a0,0x80
+	csrrs zero, mie, a0
+	li a0,0x8
+	csrrs zero, mstatus, a0
+
 	debug_ll_ns16550_init
 
 	riscv_nmon
 
 	j	_start
+

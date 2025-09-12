@@ -20,9 +20,9 @@ set_location_assignment PIN_U20 -to sd_dat3_pad_o
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sd_dat3_pad_o
 
 # UART
-set_location_assignment PIN_F14 -to UART_RXD
+set_location_assignment PIN_A15 -to UART_RXD
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_RXD
-set_location_assignment PIN_G12 -to UART_TXD
+set_location_assignment PIN_A14 -to UART_TXD
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_TXD
 
 # SDRAM
