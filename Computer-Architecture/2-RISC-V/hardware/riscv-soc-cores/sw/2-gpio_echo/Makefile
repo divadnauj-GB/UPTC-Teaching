@@ -4,7 +4,7 @@ CC=$(CROSS_COMPILE)gcc
 OBJCOPY=$(CROSS_COMPILE)objcopy
 NM=$(CROSS_COMPILE)nm
 ARCH=-march=rv32i_zicsr -mabi=ilp32
-LINKERSCRIPT=app.lds
+LINKERSCRIPT=nanorv32-wb-soc.lds
 CFLAGS+=$(ARCH) -Wall -Wextra  -std=c11 -ffreestanding
 
 CFLAGS+=-O3
@@ -50,7 +50,7 @@ application.nmon: application.bin
 	awk '{print "expect \"nmon> \"\n" $$0}' .tmp > $@ ; \
 	echo "expect \"nmon> \"" >> $@ ; \
 	echo "send \"g$$START_ADDR\"" >> $@ ; \
-	rm -f .tmp
+	xxd -e -c 4 -o 0x$$START_ADDR -g 4 $< | awk '{gsub(":", "", $$1); print ""$$1$$2""}'  > .tmp ; 
 
 
 

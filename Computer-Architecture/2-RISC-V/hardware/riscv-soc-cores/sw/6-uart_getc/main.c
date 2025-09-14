@@ -14,6 +14,7 @@ void delay(volatile uint32_t count) {
 void main(void) {
     volatile uint32_t *gpio = (uint32_t *)GPIO;
     int sw_value = 1;
+    *gpio = sw_value;
     uart_init(); // Initialize UART
     while (1) {
         while (uart_tstc())  // Check if data is available

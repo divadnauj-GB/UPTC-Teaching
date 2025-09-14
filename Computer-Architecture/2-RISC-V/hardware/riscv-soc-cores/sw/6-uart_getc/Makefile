@@ -4,7 +4,7 @@ CC=$(CROSS_COMPILE)gcc
 OBJCOPY=$(CROSS_COMPILE)objcopy
 NM=$(CROSS_COMPILE)nm
 ARCH=-march=rv32i_zicsr -mabi=ilp32
-LINKERSCRIPT=app.lds
+LINKERSCRIPT=nanorv32-wb-soc.lds
 CFLAGS+=$(ARCH) -Wall -Wextra  -std=c11 -ffreestanding
 
 CFLAGS+=-O3
