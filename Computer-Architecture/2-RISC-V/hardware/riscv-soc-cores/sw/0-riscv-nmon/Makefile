@@ -44,8 +44,10 @@ $(PROJECT).elf: $(PROJECT).o
 	$(CC) $(CFLAGS) $(LDFLAGS) $(PROJECT).o $(LDLIBS) -o $@ 
 	$(SIZE) -A -x $@
 
+START_ADDR:=80000000
 %.txt: %.bin
 	hexdump -v -e '/4 "%08x\n"' $< > $@
+	@xxd -e -c 4 -o 0x$(START_ADDR) -g 4 $< | awk '{gsub(":", "", $$1); print ""$$1$$2""}'  > .tmp ;
 
 
 

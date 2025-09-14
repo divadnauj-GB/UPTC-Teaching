@@ -5,8 +5,6 @@ filesets:
   verilog_src_files:
     file_type: verilogSource
     files:
-    - nmon_picorv32-wb-soc_10MHz_9600.txt:
-        is_include_file: true
     - nmon_picorv32-wb-soc_24MHz_115200.txt:
         is_include_file: true
     - nmon_nanorv32-wb-soc_24MHz_115200.txt:

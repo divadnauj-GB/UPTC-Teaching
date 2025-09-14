@@ -112,6 +112,7 @@ module nanorv32_core #(
 	output reg [31:0] mem_addr,
 	output reg [31:0] mem_wdata,
 	output reg [ 3:0] mem_wstrb,
+	output reg [ 3:0] mem_rstrb,
 	input      [31:0] mem_rdata,
 
 	// Look-Ahead Interface
@@ -437,6 +438,7 @@ module nanorv32_core #(
 	// assign mem_la_read = resetn && ((!mem_la_use_prefetched_high_word && !mem_state && (mem_do_rinst || mem_do_prefetch || mem_do_rdata)) ||
 	// 		(COMPRESSED_ISA && mem_xfer && (!last_mem_valid ? mem_la_firstword : mem_la_firstword_reg) && !mem_la_secondword && &mem_rdata_latched[1:0]));
 	assign mem_la_addr = (mem_do_prefetch || mem_do_rinst) ? {next_pc[31:2] + mem_la_firstword_xfer, 2'b00} : {reg_op1[31:2], 2'b00};
+	//assign mem_la_addr = (mem_do_prefetch || mem_do_rinst) ? {next_pc[31:2] + mem_la_firstword_xfer, 2'b00} : reg_op1;
 
 	assign mem_rdata_latched_noshuffle = (mem_xfer || LATCHED_MEM_RDATA) ? mem_rdata : mem_rdata_q;
 
@@ -666,6 +668,7 @@ module nanorv32_core #(
 			if (mem_la_read || mem_la_write) begin
 				mem_addr <= mem_la_addr;
 				mem_wstrb <= mem_la_wstrb & {4{mem_la_write}};
+				mem_rstrb <= mem_la_wstrb & {4{mem_la_read}};
 			end
 			if (mem_la_write) begin
 				mem_wdata <= mem_la_wdata;
@@ -1373,6 +1376,7 @@ module nanorv32_core #(
 	reg latched_is_lu;
 	reg latched_is_lh;
 	reg latched_is_lb;
+	//reg  latched_is_lbu;
 	reg [regindex_bits-1:0] latched_rd;
 
 	reg [31:0] current_pc;
@@ -1682,6 +1686,7 @@ module nanorv32_core #(
 			latched_is_lu <= 0;
 			latched_is_lh <= 0;
 			latched_is_lb <= 0;
+			// latched_is_lbu <= 0;
 			pcpi_valid <= 0;
 			pcpi_timeout <= 0;
 			mstatus_mie <= 1'b0;
@@ -1716,6 +1721,7 @@ module nanorv32_core #(
 				latched_is_lu <= 0;
 				latched_is_lh <= 0;
 				latched_is_lb <= 0;
+				// latched_is_lbu <= 0;
 				latched_rd <= decoded_rd;
 				latched_compr <= compressed_instr;
 
@@ -2201,6 +2207,7 @@ module nanorv32_core #(
 						latched_is_lu <= is_lbu_lhu_lw;
 						latched_is_lh <= instr_lh;
 						latched_is_lb <= instr_lb;
+						// latched_is_lbu <= instr_lbu;
 						if (ENABLE_TRACE) begin
 							trace_valid <= 1;
 							trace_data <= /*(irq_active ? TRACE_IRQ : 0) |*/ TRACE_ADDR | ((reg_op1 + decoded_imm) & 32'hffffffff);
@@ -2214,6 +2221,7 @@ module nanorv32_core #(
 								latched_is_lu: reg_out <= mem_rdata_word;
 								latched_is_lh: reg_out <= $signed(mem_rdata_word[15:0]);
 								latched_is_lb: reg_out <= $signed(mem_rdata_word[7:0]);
+								//// latched_is_lbu: reg_out <= mem_rdata_word[7:0];
 							endcase
 							decoder_trigger <= 1;
 							decoder_pseudo_trigger <= 1;

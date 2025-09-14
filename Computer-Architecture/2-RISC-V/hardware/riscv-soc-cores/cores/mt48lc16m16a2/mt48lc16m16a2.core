@@ -9,6 +9,13 @@ filesets:
     depend:
     - '>=::wiredelay:0'
 name: ::mt48lc16m16a2:0
+parameters:
+  bin_load:
+    datatype: file
+    description: BIN file to preload to memory
+    paramtype: plusarg
+    scope: public
+
 targets:
   default:
     filesets:

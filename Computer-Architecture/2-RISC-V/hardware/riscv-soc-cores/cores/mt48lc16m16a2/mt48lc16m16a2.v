@@ -24,7 +24,7 @@
 *                IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR
 *                A PARTICULAR PURPOSE, OR AGAINST INFRINGEMENT.
 *
-*                Copyright © 2001 Micron Semiconductor Products, Inc.
+*                Copyright ï¿½ 2001 Micron Semiconductor Products, Inc.
 *                All rights researved
 *
 * Rev  Author          Date        Changes
@@ -45,6 +45,7 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
     parameter data_bits =      16;
     parameter col_bits  =       9;
     parameter mem_sizes = 4194303;
+    parameter init_clear_mem_banks = "NO";
 
     inout     [data_bits - 1 : 0] Dq;
     input     [addr_bits - 1 : 0] Addr;
@@ -119,7 +120,7 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
     // Write Burst Mode
     wire      Write_burst_mode = Mode_reg[9];
 
-    wire      Debug            = 1'b1;                          // Debug messages : 1 = On
+    wire      Debug            = 1'b0;                          // Debug messages : 1 = On
     wire      Dq_chk           = Sys_clk & Data_in_enable;      // Check setup/hold time for DQ
     
     assign    Dq               = Dq_reg;                        // DQ buffer
@@ -156,6 +157,7 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
     time  RAS_chk0, RAS_chk1, RAS_chk2, RAS_chk3;
     time  RCD_chk0, RCD_chk1, RCD_chk2, RCD_chk3;
     time  RP_chk0, RP_chk1, RP_chk2, RP_chk3;
+    integer mem_cnt;
 
     initial begin
         Dq_reg = {data_bits{1'bz}};
@@ -171,6 +173,18 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
         RC_chk0 = 0; RC_chk1 = 0; RC_chk2 = 0; RC_chk3 = 0;
         RP_chk0 = 0; RP_chk1 = 0; RP_chk2 = 0; RP_chk3 = 0;
         $timeformat (-9, 1, " ns", 12);
+        
+        if (init_clear_mem_banks == "YES") begin
+            $display("Initialize the SDRAM memory with '0'\n");
+            for (mem_cnt = 0; mem_cnt < mem_sizes; mem_cnt = mem_cnt + 1)
+            begin
+                Bank0[mem_cnt] = 0;
+                Bank1[mem_cnt] = 0;
+                Bank2[mem_cnt] = 0;
+                Bank3[mem_cnt] = 0;
+            end
+        end
+
     end
 
     // System clock generator
@@ -1068,5 +1082,94 @@ module mt48lc16m16a2 (Dq, Addr, Ba, Clk, Cke, Cs_n, Ras_n, Cas_n, We_n, Dqm);
         $setuphold(posedge Clk,    Dqm,   tCMS, tCMH);
         $setuphold(posedge Dq_chk, Dq,    tDS,  tDH);
     endspecify
+
+    task get_byte;
+        input  [31:0] addr;
+        output [7:0]  data;
+        reg    [1:0]  bank;
+        reg    [15:0] short;
+
+        begin
+            bank = addr[24:23];
+            case (bank)
+                2'b00: short = Bank0[addr[22:1]];
+                2'b01: short = Bank1[addr[22:1]];
+                2'b10: short = Bank2[addr[22:1]];
+                2'b11: short = Bank3[addr[22:1]];
+            endcase
+
+            // Get the byte from the short
+            if (!addr[0])
+                data = short[15:8];
+            else
+                data = short[7:0];
+        end
+    endtask
+
+    task set_byte;
+        input  [31:0] addr;
+        output [7:0]  data;
+        reg    [1:0]  bank;
+        reg    [15:0] short;
+
+        begin
+            bank = addr[24:23];
+            case (bank)
+                2'b00: short = Bank0[addr[22:1]];
+                2'b01: short = Bank1[addr[22:1]];
+                2'b10: short = Bank2[addr[22:1]];
+                2'b11: short = Bank3[addr[22:1]];
+            endcase
+
+            // Set the byte in the short
+            if (!addr[0])
+                short[15:8] = data;
+            else
+                short[7:0] = data;
+
+            // Write short back to memory
+            case (bank)
+                2'b00: Bank0[addr[22:1]] = short;
+                2'b01: Bank1[addr[22:1]] = short;
+                2'b10: Bank2[addr[22:1]] = short;
+                2'b11: Bank3[addr[22:1]] = short;
+            endcase
+       end
+    endtask
+
+    task get_short;
+        input  [31:0] addr;
+        output [15:0] data;
+        reg    [1:0]  bank;
+        reg    [15:0] short;
+
+        begin
+            bank = addr[24:23];
+            case (bank)
+                2'b00: short = Bank0[addr[22:1]];
+                2'b01: short = Bank1[addr[22:1]];
+                2'b10: short = Bank2[addr[22:1]];
+                2'b11: short = Bank3[addr[22:1]];
+            endcase
+            data = short;
+        end
+    endtask
+
+    task set_short;
+        input  [31:0] addr;
+        output [15:0] data;
+        reg    [1:0]  bank;
+        reg    [15:0] short;
+
+        begin
+            bank = addr[24:23];
+            case (bank)
+                2'b00: Bank0[addr[22:1]] = data;
+                2'b01: Bank1[addr[22:1]] = data;
+                2'b10: Bank2[addr[22:1]] = data;
+                2'b11: Bank3[addr[22:1]] = data;
+            endcase
+        end
+    endtask
 
 endmodule

@@ -28,9 +28,9 @@ module mt48lc16m16a2_wrapper
    integer 	mem_words;
    integer 	i;
    reg [31:0] 	mem_word;
-   reg [1023:0] elf_file;
+   reg [1023:0] bin_file;
    reg [31:0] 	temp;
-
+   /*
    initial begin
       if($value$plusargs("elf_load=%s", elf_file)) begin
 	 $elf_load_file(elf_file);
@@ -44,7 +44,28 @@ module mt48lc16m16a2_wrapper
 	 end
       end else
 	$display("No ELF file specified");
+   end*/
+   integer file_handle;
+   reg [63:0] hex_value; 
+   integer read_items;
+   initial begin
+      if($value$plusargs("bin_load=%s", bin_file)) begin
+         $display("Initialize the SDRAM memory with BIN %0s\n",bin_file);
+         file_handle = $fopen(bin_file, "r");
+         while (!$feof(file_handle)) begin // Loop until end of file
+            read_items=$fscanf(file_handle, "%h", hex_value); 
+            $display("%h:%h",hex_value[63:32],hex_value[31:0]);
+            sdram0.Bank0[({hex_value[54:34],1'b0})]     = hex_value[31:16];
+	         sdram0.Bank0[({hex_value[54:34],1'b1})]     = hex_value[15:0];
+        end
+        $fclose(file_handle);
+        $display("Initialize the SDRAM memory with BIN file\n");
+      end else begin
+         $display("No BIN file specified");
+      end
    end
+
+
 
    always @( * ) begin
       addr <= #(TPROP_PCB) addr_i;

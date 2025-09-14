@@ -1,1 +1,1 @@
-./wb_intercon_gen ../data/wb_intercon.conf ../rtl/verilog/wb_intercon/wb_intercon.v
+python wb_intercon_gen2.py ../data/wb_intercon.yml ../rtl/verilog/wb_intercon/wb_intercon.v

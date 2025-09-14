@@ -38,24 +38,24 @@ SECTIONS
         _data_start = .;
         __DATA_BEGIN__ = .;
         *(.data .data.*);
-    } > sram
+    } > brom
     .sdata :
     {
         __SDATA_BEGIN__ = .;
         *(.sdata .sdata.* .gnu.linkonce.s.*)
-    } > sram
+    } > brom
     __bss_start = .;
     .sbss           :
     {
         *(.dynsbss)
         *(.sbss .sbss.* .gnu.linkonce.sb.*)
         *(.scommon)
-    } > sram
+    } > brom
     .bss : ALIGN(4) {
         *(.dynbss)
         *(.bss .bss.* .gnu.linkonce.b.*)
         *(COMMON)
-    } > sram
+    } > brom
     . = ALIGN(4);
     __BSS_END__ = .;
     __global_pointer$ = MIN(__SDATA_BEGIN__ + 0x800,
@@ -70,7 +70,7 @@ SECTIONS
         __stack_top = ORIGIN(sram) +  LENGTH(sram);
         __stack_size_min = MIN_STACK_SIZE;
         ASSERT(__stack_bottom + __stack_size_min < __stack_top, "Error: no space for stack");
-    } > sram
+    } > brom
 
 }
 

@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 void uart_init(void) {
-    volatile debug_ll_uart_data_t *uart = (debug_ll_uart_data_t *)DEBUG_LL_UART_ADDR;
+    volatile unsigned char *uart = (unsigned char *)DEBUG_LL_UART_ADDR;
     // Set baud rate divisor
     uart[UART_LCR] = UART_LCR_DLAB; // DLAB on
     uart[UART_DLL] = DEBUG_LL_UART_DIVISOR & 0xFF; // write low order byte
@@ -12,7 +12,7 @@ void uart_init(void) {
 
 
 void uart_putc(char c) {
-    volatile debug_ll_uart_data_t *uart = (debug_ll_uart_data_t *)DEBUG_LL_UART_ADDR;
+    volatile unsigned char *uart = (unsigned char *)DEBUG_LL_UART_ADDR;
     while ((uart[UART_LSR ] & UART_LSR_THRE) == 0);
     uart[UART_THR ] = c;
 }
@@ -20,13 +20,13 @@ void uart_putc(char c) {
 
 char uart_getc(void) {
     
-    volatile debug_ll_uart_data_t *uart = (debug_ll_uart_data_t *)DEBUG_LL_UART_ADDR;
+    volatile unsigned char *uart = (unsigned char *)DEBUG_LL_UART_ADDR;
     return (char)(uart[UART_RBR ] & 0xFF);
 }
 
 
 int uart_tstc(void) {
-    volatile debug_ll_uart_data_t *uart = (debug_ll_uart_data_t *)DEBUG_LL_UART_ADDR;
+    volatile unsigned char *uart = (unsigned char *)DEBUG_LL_UART_ADDR;
     return (uart[UART_LSR ] & UART_LSR_DR) != 0;
 }
 

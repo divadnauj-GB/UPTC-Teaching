@@ -67,6 +67,7 @@ module nanorv32 #(
 	output reg	[31:0]				mem_addr,
 	output reg	[31:0]				mem_wdata,
 	output reg	[ 3:0]				mem_wstrb,
+	output reg	[ 3:0]				mem_rstrb,
 	input		[31:0]				mem_rdata,
 
 	// Pico Co-Processor Interface (PCPI)
@@ -126,6 +127,7 @@ module nanorv32 #(
 	wire	[31:0]					mem_addr_int;
 	wire	[31:0]					mem_wdata_int;
 	wire	[3:0]					mem_wstrb_int;
+	wire	[3:0]					mem_rstrb_int;
 
 	wire							mem_la_read;
 	wire							mem_la_write;
@@ -182,6 +184,7 @@ module nanorv32 #(
 		.mem_addr					(mem_addr_int),
 		.mem_wdata					(mem_wdata_int),
 		.mem_wstrb					(mem_wstrb_int),
+		.mem_rstrb					(mem_rstrb_int),
 		.mem_rdata					(core_mem_rdata),
 
 		// Look-Ahead Interface
@@ -253,12 +256,15 @@ module nanorv32 #(
 			mem_addr		= (mem_la_read | mem_la_write) ? mem_la_addr : mem_addr_int;
 			mem_wdata		= (mem_la_read | mem_la_write) ? ({32{mem_la_write}} & mem_la_wdata) : mem_wdata_int;
 			mem_wstrb		= (mem_la_read | mem_la_write) ? ({4{mem_la_write}} & mem_la_wstrb) : mem_wstrb_int;
+			mem_rstrb		= (mem_la_read | mem_la_write) ? ({4{mem_la_read}} & mem_la_wstrb) : mem_rstrb_int;
+
 		end
 		else begin
 			core_mem_valid	= mem_valid_int;
 			mem_addr		= mem_addr_int;
 			mem_wdata		= mem_wdata_int;
 			mem_wstrb		= mem_wstrb_int;
+			mem_rstrb       = mem_rstrb_int;
 		end
 	end
 

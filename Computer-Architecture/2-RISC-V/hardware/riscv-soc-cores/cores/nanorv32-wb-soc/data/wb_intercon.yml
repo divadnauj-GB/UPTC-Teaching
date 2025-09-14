@@ -1,0 +1,30 @@
+vlnv: ::nanorv32-wb-soc-interconnect:0
+parameters:
+  endian: little
+  hosts:
+    nanorv32:
+      devices: [rom0 ,spi0memio ,sram0 ,sdram0 ,uart0 ,gpio0 ,sdram_reserved0]
+        
+  devices:
+    rom0:
+      offset : 0x00000000
+      size   : 65536
+    spi0memio:
+      offset : 0x30000000
+      size   : 0x1000000
+    sram0:
+      offset : 0x40000000
+      size   : 65536
+    sdram0:
+      offset : 0x80000000
+      size   : 0x2000000
+    uart0:
+      offset: 0x90000000
+      size  : 8
+      datawidth : 8
+    gpio0:
+      offset: 0x91000000
+      size  : 32
+    sdram_reserved0:
+      offset: 0xa0000000
+      size  : 0x2000000

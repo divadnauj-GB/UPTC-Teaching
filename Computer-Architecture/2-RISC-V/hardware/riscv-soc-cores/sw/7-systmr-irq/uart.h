@@ -4,17 +4,11 @@
 #define CONFIG_DEBUG_LL
 #ifdef QEMU
     #define DEBUG_LL_UART_ADDR	0x10000000
-    typedef unsigned char debug_ll_uart_data_t;
     #define TICKS_PER_SECOND 0x989680ull
 #else
     #define DEBUG_LL_UART_ADDR	0x90000000
     #define TICKS_PER_SECOND 24000000 
-    typedef unsigned int debug_ll_uart_data_t;
 #endif
-
-
-#define DEBUG_LL_UART_SHIFT	2
-#define DEBUG_LL_UART_IOSIZE32
 
 #define DEBUG_LL_UART_CLK	(TICKS_PER_SECOND / 16)
 #define DEBUG_LL_UART_BPS	115200

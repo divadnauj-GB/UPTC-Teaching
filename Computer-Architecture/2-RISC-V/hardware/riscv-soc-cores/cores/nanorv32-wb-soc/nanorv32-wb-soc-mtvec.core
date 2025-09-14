@@ -12,24 +12,29 @@ filesets:
     - '>=::wb_spimemio:0'
     - ::wb_sdram_ctrl:0-r4
     - '>=::gpio:0'
-    - ::wb_intercon:1.0
+    - ::wb_intercon:1.4.1
     - '>=::riscv-nmon:0'
     file_type: verilogSource
     files:
     - rtl/verilog/wb_intercon/wb_intercon.vh:
         is_include_file: true
-    - rtl/verilog/nanorv32-wb-soc.v
+    - rtl/verilog/nanorv32-wb-soc-mtvec.v
     - rtl/verilog/wb_intercon/wb_intercon.v
   verilog_tb_private_src_files:
     depend:
     - '>=::mt48lc16m16a2:0'
     - ::vlog_tb_utils:1.0
     - ::wb_bfm:1.0
-    - '>=::elf-loader:0'
     file_type: verilogSource
     files:
     - bench/nanorv32_wb_soc_mtvec_tb.v
 
+parameters:
+  bin_load:
+    datatype: file
+    description: BIN file to preload to SDRAM memoery simulation
+    paramtype: plusarg
+    scope: public
 targets:
   default:
     filesets:
@@ -39,6 +44,8 @@ targets:
     filesets:
     - verilog_src_files
     - verilog_tb_private_src_files
+    parameters:
+    - bin_load=../../../sw/7-systmr-irq/.tmp
     tools:
       icarus:
         iverilog_options:

@@ -6,3 +6,5 @@
 *.txt
 build/
 work/
+.tmp
+*.nmon

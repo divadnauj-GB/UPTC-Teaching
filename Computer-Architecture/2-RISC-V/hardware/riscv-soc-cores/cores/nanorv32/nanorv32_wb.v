@@ -117,6 +117,7 @@ module nanorv32_wb #(
 	wire [31:0] mem_addr;
 	wire [31:0] mem_wdata;
 	wire [ 3:0] mem_wstrb;
+	wire [ 3:0] mem_rstrb;
 	reg         mem_ready;
 	reg [31:0] mem_rdata;
 
@@ -168,6 +169,7 @@ module nanorv32_wb #(
 		.mem_addr (mem_addr ),
 		.mem_wdata(mem_wdata),
 		.mem_wstrb(mem_wstrb),
+		.mem_rstrb(mem_rstrb),
 		.mem_instr(mem_instr),
 		.mem_ready(mem_ready),
 		.mem_rdata(mem_rdata),
@@ -235,8 +237,11 @@ module nanorv32_wb #(
 						wbm_adr_o <= mem_addr;
 						wbm_dat_o <= mem_wdata;
 						wbm_we_o <= we;
+						if(we) begin
 						wbm_sel_o <= mem_wstrb;
-
+						end else begin
+						wbm_sel_o <= mem_rstrb;	
+						end
 						wbm_stb_o <= 1'b1;
 						wbm_cyc_o <= 1'b1;
 						state <= WBSTART;

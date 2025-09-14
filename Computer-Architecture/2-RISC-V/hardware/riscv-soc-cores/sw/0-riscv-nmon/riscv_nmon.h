@@ -67,6 +67,9 @@ nmon_main_help:
 	nmon_outs	msg_nmon_help
 #endif /* CONFIG_NMON_HELP */
 
+//li ra,0x80000000
+//jr ra
+
 nmon_main:
 	nmon_outs	msg_prompt
 

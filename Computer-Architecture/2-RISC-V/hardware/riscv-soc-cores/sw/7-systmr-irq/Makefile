@@ -62,7 +62,7 @@ $(PROJECT).nmon: $(PROJECT).bin
 	echo "expect \"nmon> \"" >> $@ ; \
 	echo "send \"g$$START_ADDR\"" >> $@ ; \
 	echo "Start address: 0x$$START_ADDR"; \
-	rm -f .tmp
+	xxd -e -c 4 -o 0x$$START_ADDR -g 4 $< | awk '{gsub(":", "", $$1); print ""$$1$$2""}'  > .tmp ; 
 
 
 
