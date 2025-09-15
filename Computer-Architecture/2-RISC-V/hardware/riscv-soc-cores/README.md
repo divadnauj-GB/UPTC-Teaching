@@ -21,6 +21,66 @@ The Whishbone B4 specification determines the interconection and the Write/Read 
 
 <img src="./doc/Whishbone-spec.png" width="300" >
 
+##  NanoRV32-wb-SoC: Hardware components (HDL)
+
+The `nanorv32-wb-soc` is available in verilog HDL. The source file of the system can be dound under the [`cores`](./cores/) directory. It is worth noting that some of the cores are used for simulation only, while other are used for synthesis on FPGA only. Here the list of the cores used in the SoC system. 
+
+- [altera_clkgen](./cores/altera_clkgen/): FPGA PLL core for Clock and Reset generation on FPGA devices.
+- [cdc_utils](./cores/cdc_utils/): Cross dommain clock implementation for WB interconection, not used in the current design but is a dependancy of `wb_intercon`.
+- [de1](./cores/de1/): Top wrapper and pin assignmets for implementation of the `nanorv32-wb-soc` on the DE1 board.
+- [de10-nano](./cores/de10-nano/):  Top wrapper and pin assignmets for implementation of the `nanorv32-wb-soc` on the DE10-nano board.
+- [gpio](./cores/gpio/): Hardware description of the GPIO core
+- [mt48lc16m16a2](./cores/mt48lc16m16a2/): Simulation model of an SDRAM mt48lc16m16a2.
+- [nanorv32](./cores/nanorv32/): Hardware files of the `nanorv32` core
+- [nanorv32-wb-soc](./cores/nanorv32-wb-soc/): Definition of the `nanorv32-wb-soc` including all dependancies.
+- [or1k_bootloaders](./cores/or1k_bootloaders/): Core definition of the **BOOT-ROM** implementation loading the nanorv32 NMON system from the riscv-nmon.
+- [picorv32](./cores/picorv32/): Hardware files of the `picorv32` core, not used in the current SoC
+- [picorv32-wb-soc](./cores/picorv32-wb-soc/): Definition of the `picorv32-wb-soc` including all dependancies, , not used in the current SoC.
+- [riscv-nmon](./cores/riscv-nmon/): Definitions of the NMON software files for `picorv32` and `nanorv32`.
+- [uart16550](./cores/uart16550/): Core definitions of the UART16550 module.
+- [verilog_utils](./cores/verilog_utils/): Different verilog functions used for simulation.
+- [verilog-arbiter](./cores/verilog-arbiter/): Core definition of bus arbiter used in wb corsbar interconnections, not used in the current SoC design.
+- [vlog_tb_utils](./cores/vlog_tb_utils/): Core defiition for verilog testbenchm used in simulation only.
+- [wb_bfm](./cores/wb_bfm/): Is a Bus Functional Model for the Wishbone bus. It can be used for creating the simulation model of WB slave core, used in simulation only.
+- [wb_common](./cores/wb_common/): Common definitions of used by the WB bus interconnections.
+- [wb_intercon](./cores/wb_intercon/): Core deinifition of the WB interconnect, it also provides a python utility that creates the ports and address locations according to the memory map. [Here](./cores/nanorv32-wb-soc/sw/README) you can find the wb_intercon generarion for `nanorv32-wb-soc` using [this memory map](./cores/nanorv32-wb-soc/data/wb_intercon.yml) definition file. 
+- [wb_ram](./cores/wb_ram/): Core definition of an on-chip SRAM memory.
+- [wb_spimemio](./cores/wb_spimemio/): Core definition of SPI memoery controller.
+- [wiredelay](./cores/wiredelay/): Delay simulation model of a wire, used of simulation only.
+
+Inside each directory there exist a fusesoc confguration file `*.core`. Such files define the files and core dependacies necesary for building an specific core. For example the [`nanorv32-wb-soc-mtvec.core`](./cores/nanorv32-wb-soc/nanorv32-wb-soc-mtvec.core) contains all the dependancies and files needed for building the `nanorv32-wb-soc` system. The following snipet shows the cores composition of the system. In case. you want to customize your SoC you need to add, remove or modify cores to this file.
+
+```yaml
+filesets:
+  verilog_src_files:
+    depend:
+    - '>=::nanorv32-mtvec:0'
+    - ::or1k_bootloaders:0.9
+    - ::uart16550:1.5.5-r1
+    - ::wb_ram:1.0
+    - '>=::wb_spimemio:0'
+    - ::wb_sdram_ctrl:0-r4
+    - '>=::gpio:0'
+    - ::wb_intercon:1.4.1
+    - '>=::riscv-nmon:0'
+    file_type: verilogSource
+    files:
+    - rtl/verilog/wb_intercon/wb_intercon.vh:
+        is_include_file: true
+    - rtl/verilog/nanorv32-wb-soc-mtvec.v
+    - rtl/verilog/wb_intercon/wb_intercon.v
+  verilog_tb_private_src_files:
+    depend:
+    - '>=::mt48lc16m16a2:0'
+    - ::vlog_tb_utils:1.0
+    - ::wb_bfm:1.0
+    file_type: verilogSource
+    files:
+    - bench/nanorv32_wb_soc_mtvec_tb.v
+```
+
+Check all the `*.core` files to understand the general syntax and project structures. 
+
 ## NanoRV32-wb-SoC: Memory Map
 In any bus specifications, including Whishbone, all cores are required to be addresable, in this way any Bus Master (e.g., processor) can specifically access or "talk" with any peripheral. 
 
@@ -58,6 +118,9 @@ In Addition, the `nanorv32` core has an internal MM timer (MTIME and MTIMECMP) w
 
 
 <img src="./doc/nanorv32-wb-soc-MM.png" width="300" >
+
+
+
 
 ## NanoRV32-wb-SoC: Preparation
 
