@@ -1,34 +1,34 @@
 # Simple RISC-V SoC
-This is an educational SoC based on an small risc-v core. The SoC correspinds to an updated version from the [risc-soc-cores](https://github.com/open-design/riscv-soc-cores.git). In particular, the SoC incorporates the usage of [nanorv32](https://github.com/elvisfox/nanorv32.git) core instead of the original [picorv32](https://github.com/YosysHQ/picorv32.git) core. The nanorv32 core includes the CSR RISC-V ISA specifications to support interrupts and exceptions instead of the customized exceptions handler provided by picorv32. On top of nanorv32, we included support for R/W of the `mtvec` register allowing the trap vector relocalization by software rather than the fixed by hardware as the original nanorv32 implementation. 
+This is an educational SoC based on a small RISC-V core. The SoC corresponds to an updated version from the [risc-soc-cores](https://github.com/open-design/riscv-soc-cores.git). In particular, the SoC incorporates the usage of [nanorv32](https://github.com/elvisfox/nanorv32.git) core instead of the original [picorv32](https://github.com/YosysHQ/picorv32.git) core. The nanorv32 core includes the CSR RISC-V ISA specifications to support interrupts and exceptions instead of the customized exception handler provided by picorv32. On top of nanorv32, we included support for R/W of the `mtvec` register, allowing the trap vector relocalization by software rather than being fixed by hardware as the original nanorv32 implementation. 
 
-The SoC implementation is handled using fusesoc 2.4.4 according to the CAP2 specifications, check the [fusesoc documentation](https://fusesoc.readthedocs.io/en/stable/) for more information.
+The SoC implementation is handled using fusesoc 2.4.4 according to the CAP2 specifications. Check the [fusesoc documentation](https://fusesoc.readthedocs.io/en/stable/) for more information.
 
 The `nanorv32-wb-soc` has been proven on the Altera DE1 and DE10-nano boards. 
 
 ##  NanoRV32-wb-SoC: System Architecture
-The SOC's system architecture is composed of different components or cores interconnected through the Wishbone bus. The general overview of the SoC is depicted in the following figure. The nanorv32 core is the master (`M`) of the system, while the IP cores correspond to the (`S`)slaves in the WB system. In particular, the system includes six IP cores, however it can be customized adding or removing more IP cores.
+The SOC's system architecture is composed of different components or cores interconnected through the Wishbone bus. The general overview of the SoC is depicted in the following figure. The nanorv32 core is the master (`M`) of the system, while the IP cores correspond to the (`S`)slaves in the WB system. In particular, the system includes six IP cores; however, it can be customized by adding or removing more IP cores.
 
-- **BOOT-ROM**: Corresponds to and on-chip read-only memory that can be used to allocate a basic bootloader or initialization program. The `nanorv32-wb-soc` uses a modified version of [RISC-V NMON](https://github.com/frantony/riscv-nmon.git). 
-- **SPI-MEMIO**: An on-chip controller for accesing external FLASH memories trough SPI interface. 
-- **ON-CHIP SRAM**: Up to 65KB of chip SRAM memory that can be used both for storing intructions and data.
-- **SDRAM CNTRL**: An SDRAM controller for accesing external Synchronous Dynamic RAM chips. The current implementation supports the SDRAM chips available in the Terasic boards such as DE1 and DE0-Nano. 
-- **UART16550**: AN UART IP according to the the 16550 specifications, allowing serial interconnection with other systems.
-- **GPIO**: AN exteral interface for connecting digital inputs (e.g., Switches) and outputs (e.g., LEDs) or any other components. 
+- **BOOT-ROM**: Corresponds to an on-chip read-only memory that can be used to allocate a basic bootloader or initialization program. The `nanorv32-wb-soc` uses a modified version of [RISC-V NMON](https://github.com/frantony/riscv-nmon.git). 
+- **SPI-MEMIO**: An on-chip controller for accessing external FLASH memories through the SPI interface. 
+- **ON-CHIP SRAM**: Up to 65KB of chip SRAM memory that can be used both for storing instructions and data.
+- **SDRAM CNTRL**: An SDRAM controller for accessing external Synchronous Dynamic RAM chips. The current implementation supports the SDRAM chips available in the Terasic boards, such as DE1 and DE0-Nano. 
+- **UART16550**: A UART IP according to the 16550 specifications, allowing serial interconnection with other systems.
+- **GPIO**: AN external interface for connecting digital inputs (e.g., Switches) and outputs (e.g., LEDs) or any other components. 
 
 <img src="./doc/nanorv32-wb-soc.png" width="300" >
 
-The Whishbone B4 specification determines the interconection and the Write/Read transactions happening in the bus. You can refer to the Whishbone [documentation](https://cdn.opencores.org/downloads/wbspec_b4.pdf) for deeper details. You can also refer to this interesting blog about the [Whishbone behavior](https://zipcpu.com/zipcpu/2017/11/07/wb-formal.html). In summary, the following figure depicts the ports and specification's interconnections for both the Master and Slave under the WB specifications.
+The Whishbone B4 specification determines the interconnection and the Write/Read transactions happening in the bus. You can refer to the Whishbone [documentation](https://cdn.opencores.org/downloads/wbspec_b4.pdf) for deeper details. You can also refer to this interesting blog about the [Whishbone behavior](https://zipcpu.com/zipcpu/2017/11/07/wb-formal.html). In summary, the following figure depicts the ports and specifications' interconnections for both the Master and Slave under the WB specifications.
 
 <img src="./doc/Whishbone-spec.png" width="300" >
 
 ##  NanoRV32-wb-SoC: Hardware components (HDL)
 
-The `nanorv32-wb-soc` is available in verilog HDL. The source file of the system can be dound under the [`cores`](./cores/) directory. It is worth noting that some of the cores are used for simulation only, while other are used for synthesis on FPGA only. Here the list of the cores used in the SoC system. 
+The `nanorv32-wb-soc` is available in Verilog HDL. The source file of the system can be found under the [`cores`](./cores/) directory. It is worth noting that some of the cores are used for simulation only, while others are used for synthesis on an FPGA only. Here is the list of the cores used in the SoC system. 
 
 - [altera_clkgen](./cores/altera_clkgen/): FPGA PLL core for Clock and Reset generation on FPGA devices.
-- [cdc_utils](./cores/cdc_utils/): Cross dommain clock implementation for WB interconection, not used in the current design but is a dependancy of `wb_intercon`.
-- [de1](./cores/de1/): Top wrapper and pin assignmets for implementation of the `nanorv32-wb-soc` on the DE1 board.
-- [de10-nano](./cores/de10-nano/):  Top wrapper and pin assignmets for implementation of the `nanorv32-wb-soc` on the DE10-nano board.
+- [cdc_utils](./cores/cdc_utils/): Cross-domain clock implementation for WB interconnection, not used in the current design, but is a dependency of `wb_intercon`.
+- [de1](./cores/de1/): Top wrapper and pin assignments for implementation of the `nanorv32-wb-soc` on the DE1 board.
+- [de10-nano](./cores/de10-nano/):  Top wrapper and pin assignments for implementation of the `nanorv32-wb-soc` on the DE10-nano board.
 - [gpio](./cores/gpio/): Hardware description of the GPIO core
 - [mt48lc16m16a2](./cores/mt48lc16m16a2/): Simulation model of an SDRAM mt48lc16m16a2.
 - [nanorv32](./cores/nanorv32/): Hardware files of the `nanorv32` core
@@ -39,16 +39,16 @@ The `nanorv32-wb-soc` is available in verilog HDL. The source file of the system
 - [riscv-nmon](./cores/riscv-nmon/): Definitions of the NMON software files for `picorv32` and `nanorv32`.
 - [uart16550](./cores/uart16550/): Core definitions of the UART16550 module.
 - [verilog_utils](./cores/verilog_utils/): Different verilog functions used for simulation.
-- [verilog-arbiter](./cores/verilog-arbiter/): Core definition of bus arbiter used in wb corsbar interconnections, not used in the current SoC design.
-- [vlog_tb_utils](./cores/vlog_tb_utils/): Core defiition for verilog testbenchm used in simulation only.
-- [wb_bfm](./cores/wb_bfm/): Is a Bus Functional Model for the Wishbone bus. It can be used for creating the simulation model of WB slave core, used in simulation only.
-- [wb_common](./cores/wb_common/): Common definitions of used by the WB bus interconnections.
-- [wb_intercon](./cores/wb_intercon/): Core deinifition of the WB interconnect, it also provides a python utility that creates the ports and address locations according to the memory map. [Here](./cores/nanorv32-wb-soc/sw/README) you can find the wb_intercon generarion for `nanorv32-wb-soc` using [this memory map](./cores/nanorv32-wb-soc/data/wb_intercon.yml) definition file. 
+- [verilog-arbiter](./cores/verilog-arbiter/): Core definition of bus arbiter used in WB corsbar interconnections, not used in the current SoC design.
+- [vlog_tb_utils](./cores/vlog_tb_utils/): Core definition for Verilog testbench used in simulation only.
+- [wb_bfm](./cores/wb_bfm/): Is a Bus Functional Model for the Wishbone bus. It can be used for creating the simulation model of the WB slave core, used in simulation only.
+- [wb_common](./cores/wb_common/): Common definitions used by the WB bus interconnections.
+- [wb_intercon](./cores/wb_intercon/): Core definition of the WB interconnect, it also provides a Python utility that creates the ports and address locations according to the memory map. [Here](./cores/nanorv32-wb-soc/sw/README) you can find the wb_intercon generarion for `nanorv32-wb-soc` using [this memory map](./cores/nanorv32-wb-soc/data/wb_intercon.yml) definition file. 
 - [wb_ram](./cores/wb_ram/): Core definition of an on-chip SRAM memory.
 - [wb_spimemio](./cores/wb_spimemio/): Core definition of SPI memoery controller.
-- [wiredelay](./cores/wiredelay/): Delay simulation model of a wire, used of simulation only.
+- [wiredelay](./cores/wiredelay/): Delay simulation model of a wire, used for simulation only.
 
-Inside each directory there exist a fusesoc confguration file `*.core`. Such files define the files and core dependacies necesary for building an specific core. For example the [`nanorv32-wb-soc-mtvec.core`](./cores/nanorv32-wb-soc/nanorv32-wb-soc-mtvec.core) contains all the dependancies and files needed for building the `nanorv32-wb-soc` system. The following snipet shows the cores composition of the system. In case. you want to customize your SoC you need to add, remove or modify cores to this file.
+Inside each directory, there exists a fusesoc configuration file `*.core`. Such files define the files and core dependencies necessary for building a specific core. For example, the [`nanorv32-wb-soc-mtvec.core`](./cores/nanorv32-wb-soc/nanorv32-wb-soc-mtvec.core) contains all the dependencies and files needed for building the `nanorv32-wb-soc` system. The following snippet shows the core composition of the system. If you want to customize your SoC, you need to add, remove, or modify cores in this file.
 
 ```yaml
 filesets:
@@ -82,9 +82,9 @@ filesets:
 Check all the `*.core` files to understand the general syntax and project structures. 
 
 ## NanoRV32-wb-SoC: Memory Map
-In any bus specifications, including Whishbone, all cores are required to be addresable, in this way any Bus Master (e.g., processor) can specifically access or "talk" with any peripheral. 
+In any bus specifications, including Whishbone, all cores are required to be addressable; in this way, any Bus Master (e.g., processor) can specifically access or "talk" with any peripheral. 
 
-In this regard, the `nanorv32-wb-soc`, in its current implementation follows the following Memory-Map. In the lower addresable space the **BOOT-ROM** can be accessed. In fact, after a hard-reset the `nanorv32` points ot the address `0x00000000`, hence this memory should allocate the entry program in the system. It is important to underlyne that by default, the **BOOT-ROM** is initialized with [**NMON**](./sw/0-riscv-nmon/nmon_nanorv32-wb-soc_24MHz_115200.S) a simple monitor for RISC-V cores that permits a UART-based interaction for basic I/O, including bootloader capabilities using serial through serial comunication.
+In this regard, the `nanorv32-wb-soc`, in its current implementation, follows the following Memory-Map. In the lower addressable space, the **BOOT-ROM** can be accessed. In fact, after a hard reset, the `nanorv32` points ot the address `0x00000000`, hence this memory should allocate the entry program in the system. It is important to underlyne that by default, the **BOOT-ROM** is initialized with [**NMON**](./sw/0-riscv-nmon/nmon_nanorv32-wb-soc_24MHz_115200.S) a simple monitor for RISC-V cores that permits a UART-based interaction for basic I/O, including bootloader capabilities using serial through serial comunication.
 
 Likewise, the rest of the cores are assigned to different memory locations as follows: 
 
@@ -107,7 +107,7 @@ Likewise, the rest of the cores are assigned to different memory locations as fo
     - BASE_ADDRESS: 0xA0000000
     - SIZE: 32MB
 
-In Addition, the `nanorv32` core has an internal MM timer (MTIME and MTIMECMP) which is not connected to the Whishbone bus. In such a case the MM specifications are the following ones:
+In Addition, the `nanorv32` core has an internal MM timer (MTIME and MTIMECMP) which is not connected to the Wishbone bus. In such a case, the MM specifications are the following:
 
 - MTIME:
     - BASE_ADDRESS: 0xFFFFFFF0
@@ -124,35 +124,35 @@ In Addition, the `nanorv32` core has an internal MM timer (MTIME and MTIMECMP) w
 
 ## NanoRV32-wb-SoC: Preparation
 
-In order to use the `nanorv32-wb-soc` you need to install some packages and tools. Here the requirements:
+In order to use the `nanorv32-wb-soc`, you need to install some packages and tools. Here are the requirements:
 
 ### System requirements
-- Linux system X-86 (e.g., ubuntu 22.04): (it can be used in a virtual machine or using the WSL for windows)
-- Miniconda or Anaconda: Here instalation [instructions](https://www.anaconda.com/docs/getting-started/miniconda/install#linux-terminal-installer)
-- Quartus II 13.0 SP1 Webedition: (You can keep it on windows if you already have it)
+- Linux system X-86 (e.g., Ubuntu 22.04): (it can be used in a virtual machine or using the WSL for Windows)
+- Miniconda or Anaconda: Here are installation [instructions](https://www.anaconda.com/docs/getting-started/miniconda/install#linux-terminal-installer)
+- Quartus II 13.0 SP1 Webedition: (You can keep it on Windows if you already have it)
 - OSS-CAD-SUITE: Here instalation [instructions](https://github.com/YosysHQ/oss-cad-suite-build)
 - riscv64-unknown-elg-gcc toolchain
 
-### Create a conda environmet and install fusesoc
-1. Once you have installed all the necesary dependancies create the conda environment with fusesoc as follows:
+### Create a conda environment and install fusesoc
+1. Once you have installed all the necessary dependencies create the conda environment with fusesoc as follows:
 
     ```bash
     conda create -n fusesoc python=3.11
     conda activate fusesoc
     pip install fusesoc
     ```
-2. Be sure you have cloned or pull the last commin of the current repository
+2. Be sure you have cloned or pulled the last commit of the current repository
 
     ```bash
-    # if you haven't clone the repository type this command 
+    # if you haven't cloned the repository, type this command 
     git clone https://github.com/divadnauj-GB/UPTC-Teaching.git
-    # if you already have the repository you can directly type this command whitin the repository
+    # If you already have the repository, you can directly type this command within the repository
     git pull
     ```
 
 ## NanoRV32-wb-SoC: Simulation
 
-In orde to simulate the default NMON execution of `nanorv32-wb-soc` foll
+In order to simulate the default NMON execution of `nanorv32-wb-soc`, follow these steps.
 
 ```bash
 # change the directory into the riscv-soc-cores directory whiting the course repository
@@ -161,7 +161,7 @@ cd Computer-Architecture/2-RISC-V/hardware/riscv-soc-cores/
 conda activate fusesoc
 # launch the simulation using the following command
 fusesoc --cores-root cores/ run --target sim nanorv32-wb-soc-mtvec
-# After running the simulation you will see the following message, indicating that you have at least the simulation tools working properly
+# After running the simulation, you will see the following message, indicating that you have at least the simulation tools working properly
 
 nmon commands:
  q - quit
@@ -174,22 +174,22 @@ nmon>
 # After this you can open the waveforms using this command
 gtkwave build/nanorv32-wb-soc-mtvec_0/sim-icarus/nanorv32-wb-soc.vcd 
 ```
-After opening the waveforms you can add the signals you would like to inspect, in this example some random signals including the data sent by the uart are depicted. Feel free to interact whit the waves.
+After opening the waveforms you can add the signals you would like to inspect, in this example some random signals including the data sent by the uart are depicted. Feel free to interact with the waves.
 
 <img src="./doc/nanorv32-wb-soc-wave.png" >
 
 ## NanoRV32-wb-SoC: Build the HW on FPGA (DE1-Board)
-You can implement directly the `nanorv32-wb-soc` on the DE1 or DE10-nano boards. 
+You can implement the `nanorv32-wb-soc` directly on the DE1 or DE10-nano boards. 
 
-- If you have quartus installed on you linux system follow these instructions 
+- If you have Quartus installed on your Linux system, follow these instructions 
 
     ```bash
     conda activate fusesoc
-     #you need to specify the path where quartus is installed 
+     #you need to specify the path where Quartus is installed 
     export PATH=$PATH:</path/to/quartus>/13.0sp1/quartus/bin
-     #This will automatically create and compile the project in quartus II, generating the programing file for the FPGA
+     #This will automatically create and compile the project in Quartus II, generating the programming file for the FPGA
     
-     #This command will take some time, after the compilation runs succesfully you will obtain the *.sof file in the "./build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/" directory
+     #This command will take some time. After the compilation runs successfully you will obtain the *.sof file in the "./build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/" directory
     fusesoc --cores-root cores/ run --build --tool quartus de1-nanorv32-wb-soc-mtvec
 
      # connect your FPGA to the system and run the following command to detect the USB blaster JTAG chain
@@ -199,25 +199,25 @@ You can implement directly the `nanorv32-wb-soc` on the DE1 or DE10-nano boards.
     quartus_pgm  -m jtag -o "p;build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/de1-nanorv32-wb-soc-mtvec_0.sof"
     ```
 
-- If you do not have Quartus on your linux system but you have it on you Windows machine you can follow these instructions
+- If you do not have Quartus on your Linux system, but you have it on your Windows machine, you can follow these instructions
 
-   1. run the following command. This will show a failed error since quartus is not available, however it will create the necesary scripts to be run on Quartus under the following drectory: `./build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/`
+   1. Run the following command. This will show a failed error since Quartus is not available; however, it will create the necessary scripts to be run on Quartus under the following directory: `./build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/`
 
         ```bash
         conda activate fusesoc
         fusesoc --cores-root cores/ run --build --tool quartus de1-nanorv32-wb-soc-mtvec
         ```
 
-    2. copy the full content of the directory `./build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/` to your windows system
+    2. Copy the full content of the directory `./build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/` to your Windows system
 
-    3. open a windows terminal (powershell or equivalent), enter into the `./build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/` directory and run the following command
+    3. Open a Windows terminal (PowerShell or equivalent), enter into the `./build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/` directory, and run the following command
 
         ```bash
         quartus_sh -t de1-nanorv32-wb-soc-mtvec_0.tcl
         ```
-    4. This will create the Quartus project isnide the directory
+    4. This will create the Quartus project inside the directory
 
-    5. Open Quartus as grafical interface and load the generated project, then follow the usual instruction on Quartus, compile and program the FPGA
+    5. Open Quartus as graphical interface and load the generated project, then follow the usual instructions on Quartus, compile and program the FPGA
 
 
 ## NanoRV32-wb-SoC: NMON interaction 
@@ -240,16 +240,16 @@ Once you have programmed the SoC hardware on the FPGA, connect a USB-Serial adap
       GPIO0
 -------------------------
 
-conect the FT232 board to you pc and open a terminal, on linux you need just to run screen as follows:
-NOE: If you do not have screen, ou can install it `sudo apt get install screen`
+Connect the FT232 board to your pc and open a terminal. On Linux, you just need to run screen as follows:
+NOE: If you do not have screen, you can install it `sudo apt-get install screen`
 
 ```bash
 screen /dev/ttyUSB0 115200
 ```
 
-NOTE: On windows you can use TeraTerm or Putty.
+NOTE: On Windows, you can use TeraTerm or Putty.
 
-Press any key and you will get the following prompt from `nanorv32-wb-soc` in the FPGA. 
+Press any key, and you will get the following prompt from `nanorv32-wb-soc` in the FPGA. 
 
 ```bash
 nmon commands:
@@ -261,7 +261,7 @@ nmon commands:
 
 nmon> 
 ```
-Follow the command description in the promp to interact with the system: For example, read and write values to the address 0x40000000
+Follow the command description in the prompt to interact with the system: For example, read and write values to the address 0x40000000
 
 ```bash
 nmon>  d 40000000
@@ -271,12 +271,12 @@ nmon>  d 40000000
 nmon>  AAAAAA
 ```
 
-After you finishied to interact with the system type `CNTRL+A K` and then `Y`  for close the port. 
+After you finish interacting with the system, type `CNTRL+A K` and then `Y` to close the port. 
 
 
 ## NanoRV32-wb-SoC: Software examples
 
-In this repository you will find some SW examples that can be programmed to the system. We use NMON for booting the applications. The list of programs can be found under the [SW](./sw/) directory in this repository. The following are the current list of programs tested on the platform: 
+In this repository, you will find some SW examples that can be programmed for the system. We use NMON for booting the applications. The list of programs can be found under the [SW](./sw/) directory in this repository. The following is the current list of programs tested on the platform: 
 
 - [0-riscv-nmom](./sw/0-riscv-nmon/)
 - [1-blink_led](./sw/1-blink_led/)
@@ -288,12 +288,12 @@ In this repository you will find some SW examples that can be programmed to the 
 - [7-systmr-irq](./sw/7-systmr-irq/)
 - [8-FreeRTOS-demo1](./sw/8-FreeRTOS-demo1/)
 - [9-FreeRTOS-demo2](./sw/9-FreeRTOS-demo2/)
-- [FreeRTOS-Kernel](./sw/FreeRTOS-Kernel/): This directory corresponds to the source files of FreeRTOS repository used in the FreeRTOS-demos.
+- [FreeRTOS-Kernel](./sw/FreeRTOS-Kernel/): This directory corresponds to the source files of the FreeRTOS repository used in the FreeRTOS-demos.
 
 ### Booting a sw application using NMON 
 For loading and booting your application with NMON you need to install `expect`, you can simply type `sudo apt install expect`. 
 
-For example enter into the `1-blink_led` directory and compile it and program the generated `*.nmon` file.
+For example, enter into the `1-blink_led` directory, compile it, and program the generated `*.nmon` file.
 
 ```bash
 cd sw/1-blink_led
@@ -301,4 +301,4 @@ make clean nmon
 expect nmon-loader.sh application.nmon /dev/ttyUSB 115200
 ```
 
-if you want to terminate the terminal session after programming the SOC, press `~-` followed by the return key.
+If you want to terminate the terminal session after programming the SOC, press `~-` followed by the return key.
