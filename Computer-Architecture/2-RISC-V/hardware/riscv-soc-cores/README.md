@@ -288,11 +288,12 @@ In this repository you will find some SW examples that can be programmed to the 
 - [7-systmr-irq](./sw/7-systmr-irq/)
 - [8-FreeRTOS-demo1](./sw/8-FreeRTOS-demo1/)
 - [9-FreeRTOS-demo2](./sw/9-FreeRTOS-demo2/)
+- [FreeRTOS-Kernel](./sw/FreeRTOS-Kernel/): This directory corresponds to the source files of FreeRTOS repository used in the FreeRTOS-demos.
 
 ### Booting a sw application using NMON 
 For loading and booting your application with NMON you need to install `expect`, you can simply type `sudo apt install expect`. 
 
-For example enter into the `1-blink_led` directory and compile it and program the generated *.nmon file.
+For example enter into the `1-blink_led` directory and compile it and program the generated `*.nmon` file.
 
 ```bash
 cd sw/1-blink_led
