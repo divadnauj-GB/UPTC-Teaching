@@ -64,7 +64,7 @@ module de1_picorv32_wb_soc(
 	picorv32_wb_soc #(
 		.PROGADDR_RESET (32'h 0000_0000),
 
-		.BOOTROM_MEMFILE ("nmon_picorv32-wb-soc_24MHz_115200.txt"),
+		.BOOTROM_MEMFILE ("./src/riscv-nmon_0/nmon_picorv32-wb-soc_24MHz_115200.txt"),
 		.BOOTROM_MEMDEPTH (1024),
 
 		.SRAM0_TECHNOLOGY ("ALTSYNCRAM"),
