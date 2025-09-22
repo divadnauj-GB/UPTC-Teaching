@@ -1,0 +1,28 @@
+{
+    "idf.pythonInstallPath": "/Users/juand/opt/miniconda3/bin/python",
+    "files.associations": {
+        "system.h": "c",
+        "gpio_hal.h": "c",
+        "soc_caps.h": "c",
+        "gpio_periph.h": "c",
+        "io_mux_reg.h": "c",
+        "soc.h": "c",
+        "gpio_ll.h": "c",
+        "gpio_types.h": "c",
+        "rtc_cntl_reg.h": "c",
+        "usb_serial_jtag_reg.h": "c",
+        "misc.h": "c",
+        "gpio_sig_map.h": "c",
+        "stdlib.h": "c",
+        "usb_utmi_hal.h": "c",
+        "touch_sensor_legacy_types.h": "c",
+        "touch_sensor_hal.h": "c",
+        "wdt_hal.h": "c",
+        "rwdt_ll.h": "c",
+        "timer_group_struct.h": "c",
+        "wdt_periph.h": "c",
+        "assert.h": "c",
+        "wdt_types.h": "c",
+        "timer_group_reg.h": "c"
+    }
+}
