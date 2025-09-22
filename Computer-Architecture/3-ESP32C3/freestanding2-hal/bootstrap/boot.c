@@ -18,7 +18,7 @@ void call_start_cpu0() {
   for (char *p = &_sbss; p < &_ebss;) *p++ = '\0';
   __asm__ __volatile__  ("mv sp, %[stack_top]\n": :[stack_top] "r" (__stack_top));
   __asm__ __volatile__  ("call  __libc_init_array");
-  soc_init();
+  //soc_init();
   main();
   for (;;) (void) 0;
 }

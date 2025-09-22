@@ -54,9 +54,9 @@ SECTIONS {
   }
 }
 
-
-
-
+/*The following are function stubs defined inside the esp_rom of the ESP32C3, please refer to the 
+~/esp/v5.5/esp-idf/components/esp_rom/ld/*.ld files which contains detailed definitions of functions
+already available in such ROM memory. */
 /* Functions */
 __absvdi2 = 0x40000764;
 __absvsi2 = 0x40000768;

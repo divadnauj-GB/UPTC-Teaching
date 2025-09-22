@@ -23,6 +23,14 @@
         "wdt_periph.h": "c",
         "assert.h": "c",
         "wdt_types.h": "c",
-        "timer_group_reg.h": "c"
+        "timer_group_reg.h": "c",
+        "systimer_hal.h": "c",
+        "systimer_types.h": "c",
+        "clk_tree_defs.h": "c",
+        "system_reg.h": "c",
+        "system_struct.h": "c",
+        "rtc_cntl_struct.h": "c",
+        "systimer_struct.h": "c",
+        "systimer_reg.h": "c"
     }
 }

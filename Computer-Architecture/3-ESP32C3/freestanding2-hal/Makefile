@@ -86,13 +86,13 @@ SRCS +=  $(wildcard $(IDF_PATH)/components/hal/xt_wdt_hal.c)
 
 
 INCDIRS ?= -I. -I./inc
+INCDIRS += -I$(IDF_PATH)/components/soc/include 
 INCDIRS += -I$(IDF_PATH)/components/soc/esp32c3/include 
 INCDIRS += -I$(IDF_PATH)/components/soc/esp32c3/register 
-INCDIRS += -I$(IDF_PATH)/components/soc/include 
-INCDIRS += -I$(IDF_PATH)/components/esp_common/include
 INCDIRS += -I$(IDF_PATH)/components/hal/esp32c3/include
 INCDIRS += -I$(IDF_PATH)/components/hal/platform_port/include
 INCDIRS += -I$(IDF_PATH)/components/hal/include
+INCDIRS += -I$(IDF_PATH)/components/esp_common/include
 INCDIRS += -I$(IDF_PATH)/components/esp_rom/include
 INCDIRS += -I$(IDF_PATH)/components/esp_rom/esp32c3/include
 INCDIRS += -I$(IDF_PATH)/components/esp_rom/esp32c3/include/esp32c3

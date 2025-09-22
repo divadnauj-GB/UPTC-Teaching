@@ -2,11 +2,19 @@
 #include <stdlib.h>
 #include "hal/gpio_hal.h"
 #include "hal/wdt_hal.h"
+#include "soc/soc_caps.h"
+#include "soc/system_reg.h"
+#include "soc/system_struct.h"
+#include "soc/clk_tree_defs.h"
 
 volatile gpio_hal_context_t gpio_hal={.dev=GPIO_LL_GET_HW(0)};
-volatile wdt_hal_context_t rwdt_hal=RWDT_HAL_CONTEXT_DEFAULT();
-volatile wdt_hal_context_t mwdt0_hal={.inst=WDT_MWDT0,.rwdt_dev=&RTCCNTL,.mwdt_dev=&TIMERG0};
-volatile wdt_hal_context_t mwdt1_hal={.inst=WDT_MWDT0,.rwdt_dev=&RTCCNTL,.mwdt_dev=&TIMERG1};
+
+typedef struct 
+{
+  wdt_hal_context_t rwdt_0;
+  wdt_hal_context_t mwdt_0;
+  wdt_hal_context_t mwdt_1;
+} wdt_hal_all_context_t;
 
 // On the ESP32C3 dev boards, the WS2812 LED is connected to GPIO 8
 static int ws_2812_pin = GPIO_NUM_8;
@@ -56,21 +64,44 @@ static void rainbow(gpio_hal_context_t *gpio_hal,int count) {
   }
 }
 
+void wdt_disable_all(wdt_hal_all_context_t *wdt_all){
+  wdt_hal_init(&wdt_all->rwdt_0,WDT_RWDT,0,false);
+  wdt_hal_init(&wdt_all->mwdt_0,WDT_MWDT0,0,false);
+  wdt_hal_init(&wdt_all->mwdt_1,WDT_MWDT1,0,false);
+
+  wdt_hal_write_protect_disable(&wdt_all->rwdt_0);
+  wdt_all->rwdt_0.rwdt_dev->wdt_config0.val=0;
+  wdt_all->rwdt_0.rwdt_dev->swd_wprotect=RTC_CNTL_SWD_WKEY_VALUE;
+  wdt_all->rwdt_0.rwdt_dev->swd_conf.swd_disable=1;
+}
+
+
+void soc_init2(void){
+  system_dev_t *sys_dev=&SYSTEM;
+  sys_dev->cpu_per_conf.reg_cpuperiod_sel=1;
+  sys_dev->cpu_per_conf.reg_cpu_wait_mode_force_on=1;
+  sys_dev->cpu_per_conf.reg_cpu_waiti_delay_num=0xF;
+  sys_dev->cpu_per_conf.reg_pll_freq_sel=1;
+
+  sys_dev->sysclk_conf.reg_soc_clk_sel=SOC_CPU_CLK_SRC_PLL;
+  sys_dev->sysclk_conf.reg_clk_div_en=1;
+  sys_dev->sysclk_conf.reg_pre_div_cnt=0;
+}
+
 int main(void) {
   int initialized = 0;
+  //soc_init();
+  soc_init2();
   //wdt_disable();
+  /*WDT disable*/ 
+  wdt_hal_all_context_t wdt_all;
+  wdt_disable_all(&wdt_all);
+
+  /* GPIO configuration*/
   volatile gpio_hal_context_t *gpio=&gpio_hal;
-  volatile wdt_hal_context_t *rwdt=&rwdt_hal;
-  volatile wdt_hal_context_t *mwdt0=&mwdt0_hal;
-  volatile wdt_hal_context_t *mwdt1=&mwdt1_hal;
-
-  wdt_hal_deinit(rwdt);
-  wdt_hal_deinit(mwdt0);
-  wdt_hal_deinit(mwdt1);
-
-
   gpio_hal_input_disable(gpio,GPIO_NUM_8);
   gpio_hal_output_enable(gpio,GPIO_NUM_8);
+  
   
 
   for (;;) {
