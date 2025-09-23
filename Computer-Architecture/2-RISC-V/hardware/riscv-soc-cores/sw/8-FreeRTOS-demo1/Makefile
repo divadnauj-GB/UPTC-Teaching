@@ -18,7 +18,7 @@ ifdef QEMU
 	CFLAGS+=-g -DQEMU
 	LINKERSCRIPT=qemu.lds 
 else
-	CFLAGS+=-Os
+	CFLAGS+=-O3
 	LINKERSCRIPT=nanorv32-wb-soc.lds 
 endif
 CFLAGS+=--specs=nano.specs --specs=nosys.specs
@@ -33,7 +33,9 @@ LDLIBS = -lc -lgcc
 OBJS = \
 	bin/start.o \
 	bin/main.o \
-	bin/uart.o \
+	bin/soc_uart.o \
+	bin/soc_gpio.o \
+	bin/systimer.o \
 	bin/print.o \
 	bin/portASM.o \
 	bin/port.o \

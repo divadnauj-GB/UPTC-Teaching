@@ -33,7 +33,9 @@ LDLIBS = -lc -lgcc
 OBJS = \
 	bin/start.o \
 	bin/main.o \
-	bin/uart.o \
+	bin/soc_uart.o \
+	bin/soc_gpio.o \
+	bin/systimer.o \
 	bin/print.o \
 	bin/portASM.o \
 	bin/port.o \

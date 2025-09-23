@@ -1,13 +1,21 @@
-CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-elf-
+CROSS_COMPILE=riscv64-unknown-elf-
+QEMU ?= 
 
 CC=$(CROSS_COMPILE)gcc
 OBJCOPY=$(CROSS_COMPILE)objcopy
 NM=$(CROSS_COMPILE)nm
 ARCH=-march=rv32i_zicsr -mabi=ilp32
-LINKERSCRIPT=nanorv32-wb-soc.lds
+
 CFLAGS+=$(ARCH) -Wall -Wextra  -std=c11 -ffreestanding
 
-CFLAGS+=-O3
+ifdef QEMU
+	CFLAGS+=-g -DQEMU
+	LINKERSCRIPT=qemu.lds 
+else
+	CFLAGS+=-O3
+	LINKERSCRIPT=nanorv32-wb-soc.lds 
+endif
+
 CFLAGS+=-fno-pic --specs=nano.specs --specs=nosys.specs
 CFLAGS+=$(ARCH)
 
@@ -18,27 +26,31 @@ LDFLAGS +=-Wl,--no-relax
 LDLIBS = -lc -lgcc
 
 C_SRC = $(wildcard *.c)
+C_SRC += $(wildcard src/*.c)
+
 ASM_SRC = $(wildcard *.S)
 # Convert the list of .c files into a list of .o object files
 OBJS = $(patsubst %.c, %.o, $(C_SRC))
 OBJS += $(patsubst %.S, %.o, $(ASM_SRC))
+
+INCLUDES=-I./inc -I./
 
 build: application.elf 
 nmon: application.nmon
 
 
 %.o: %.S
-	$(CC) $(CFLAGS) -c $^ -o $@ 
+	$(CC) $(CFLAGS) $(INCLUDES) -c $^ -o $@ 
 	
 %.o: %.c 
-	$(CC) $(CFLAGS)  -c $< -o $@ 
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 
 
 %.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
 
 application.elf: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LDLIBS) -o $@ 
-	/opt/riscv/bin/riscv64-unknown-elf-size -A -x $@
+	$(CROSS_COMPILE)size -A -x $@
 
 START_ADDR := $(shell $(NM) *.elf | awk '/ _start/ {print $$1}')
 
@@ -55,4 +67,4 @@ application.nmon: application.bin
 
 
 clean:
-	rm -f *.o *.elf *.img *.bin *.nmon symbols.txt .tmp *.txt
+	rm -f *.o *.elf *.img *.bin *.nmon symbols.txt .tmp *.txt $(OBJS)

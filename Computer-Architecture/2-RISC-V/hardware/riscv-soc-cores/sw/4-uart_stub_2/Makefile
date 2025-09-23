@@ -1,4 +1,4 @@
-CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-elf-
+CROSS_COMPILE=riscv64-unknown-elf-
 
 CC=$(CROSS_COMPILE)gcc
 OBJCOPY=$(CROSS_COMPILE)objcopy

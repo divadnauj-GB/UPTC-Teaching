@@ -30,20 +30,23 @@ LDFLAGS +=-Wl,--no-relax
 LDLIBS = -lc -lgcc
 
 C_SRC = $(wildcard *.c)
+C_SRC += $(wildcard src/*.c)
 ASM_SRC = $(wildcard *.S)
 # Convert the list of .c files into a list of .o object files
 OBJS = $(patsubst %.c, %.o, $(C_SRC))
 OBJS += $(patsubst %.S, %.o, $(ASM_SRC))
+
+INCLUDES=-I./inc -I./
 
 build: $(PROJECT).elf 
 nmon: $(PROJECT).nmon
 
 
 %.o: %.S
-	$(CC) $(CFLAGS) -c $^ -o $@ 
+	$(CC) $(CFLAGS) $(INCLUDES) -c $^ -o $@ 
 	
 %.o: %.c 
-	$(CC) $(CFLAGS)  -c $< -o $@ 
+	$(CC) $(CFLAGS)  $(INCLUDES) -c $< -o $@ 
 
 %.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
@@ -67,4 +70,4 @@ $(PROJECT).nmon: $(PROJECT).bin
 
 
 clean:
-	rm -f *.o *.elf *.img *.bin *.nmon symbols.txt .tmp *.txt
+	rm -f *.o *.elf *.img *.bin *.nmon symbols.txt .tmp *.txt $(OBJS)

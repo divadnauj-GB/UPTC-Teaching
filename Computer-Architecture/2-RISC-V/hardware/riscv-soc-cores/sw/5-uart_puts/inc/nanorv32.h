@@ -1,27 +1,17 @@
 #ifndef NANORV32_H
 #define NANORV32_H
-
-#define csr_custom_irq_mask		0x7C0
-#define csr_custom_irq_pend		0x7C1
-#define csr_custom_trap			0x7C2
-
+#include "nanorv32_regs.h"
+#include "soc_regs.h"
+#include "riscv-csr.h"
 
 
 #ifdef QEMU
-    #define configMTIME_BASE_ADDRESS		0x0200BFF8
-    #define configMTIMECMP_BASE_ADDRESS		0x02004000
-    #define TICKS_PER_SECOND 10000000 /*10 MHz*/
-    #define US_PER_SECOND 1000000 
-    #define GPIO 0x100000
+    #define CPU_CLK_FREQ  10000000 /*10 MHz*/
 
     #define PUSH_CUSTOM_TRAP_REGS
     #define POP_CUSTOM_TRAP_REGS 
 #else
-    #define configMTIME_BASE_ADDRESS		0xfffffff0
-    #define configMTIMECMP_BASE_ADDRESS		0xfffffff8
-    #define TICKS_PER_SECOND 24000000 /*10 MHz*/
-    #define US_PER_SECOND 1000000
-    #define GPIO 0x91000000
+    #define CPU_CLK_FREQ 24000000 /*10 MHz*/
     
     #define PUSH_CUSTOM_TRAP_REGS \
     register unsigned int valuep;        \
@@ -37,8 +27,9 @@
     
 #endif
 
-#define MTIME_TICK_PERIOD (TICKS_PER_SECOND / US_PER_SECOND)
+#define US_PER_SECOND 1000000
 
+void risc_v_trap_handler(void) __attribute__((interrupt));
 
 
 #endif // NANORV32_H

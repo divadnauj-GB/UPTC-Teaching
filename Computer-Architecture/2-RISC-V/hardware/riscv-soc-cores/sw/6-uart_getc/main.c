@@ -1,7 +1,7 @@
-#define GPIO 0x91000000
 #include <stdint.h>
 #include <stdio.h>
-#include "uart.h"
+#include "soc_gpio.h"
+#include "soc_uart.h"
 
 char wr_buffer[256]="";
 
@@ -12,10 +12,12 @@ void delay(volatile uint32_t count) {
 }
 
 void main(void) {
-    volatile uint32_t *gpio = (uint32_t *)GPIO;
-    int sw_value = 1;
-    *gpio = sw_value;
-    uart_init(); // Initialize UART
+    volatile uint32_t sw_value = 1;
+
+    gpio_init();
+    uart_init(115200); // Initialize UART
+
+    gpio_write_port(sw_value);
     while (1) {
         while (uart_tstc())  // Check if data is available
         {
@@ -32,7 +34,7 @@ void main(void) {
             if (sw_value < 0) {
                 sw_value = 0;
             }
-            *gpio = sw_value;  // Write to LEDs
+            gpio_write_port(sw_value);  // Write to LEDs
             sprintf(wr_buffer, "GPIO State: 0x%08X\n\r", (uint8_t)sw_value); // Use newlib sprintf
             uart_puts(wr_buffer); // Output gpio state
         }

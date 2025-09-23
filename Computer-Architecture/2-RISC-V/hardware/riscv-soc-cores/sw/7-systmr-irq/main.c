@@ -1,6 +1,8 @@
-#include "system.h"
-#include "riscv-csr.h"
-#include "uart.h"
+#include "./inc/nanorv32.h"
+#include "./inc/soc_gpio.h"
+#include "./inc/soc_uart.h"
+#include "./inc/systimer.h"
+
 #include <stdint.h>
 #include <stdio.h>
 
@@ -34,11 +36,11 @@ void  __attribute__((interrupt ("machine") ))  risc_v_trap_handler(void) {
 
 
 void main(void) {
-    volatile uint32_t *gpio = (uint32_t *)GPIO;
     uint32_t sw_value = 0, curr_sw=0, old_sw=0;
     int counter = 0, idx=0;   
     char str[100];
-    uart_init();
+    gpio_init();
+    uart_init(115200);
     csr_write_mtvec((uint32_t )risc_v_trap_handler);
     csr_set_bits_mie(MIE_MTI_BIT_MASK);
     mtime_updated(100*MTIME_TICK_PERIOD); // Set timer interrupt period
@@ -46,12 +48,12 @@ void main(void) {
     csr_set_bits_mstatus(MSTATUS_MIE_BIT_MASK);
     //CSR_SET_BITS_IMM_MSTATUS(MSTATUS_MIE_BIT_MASK);
     // Enable machine timer interrupt in mie
-    sw_value = *gpio; 
-    *gpio = sw_value;     
+    sw_value = gpio_read_port(); 
+    gpio_write_port(sw_value);
     uart_puts("Tick...\n");
     while (1)
     {
-        curr_sw = *gpio;
+        curr_sw = gpio_read_port();
         if (curr_sw!=old_sw)
         {
             old_sw=curr_sw;
@@ -63,7 +65,7 @@ void main(void) {
             if (counter >= 50) { // Approximately every second
                 counter = 0;
                 sw_value = ~(sw_value)&0xFF; // Read the state of the 4 switches
-                *gpio = sw_value & 0xFF; // Output to the 4 LEDs
+                gpio_write_port(sw_value & 0xFF);
                 sprintf(msg,"Tick...%d\n",values[idx]);
                 uart_puts(msg);
                 idx++;

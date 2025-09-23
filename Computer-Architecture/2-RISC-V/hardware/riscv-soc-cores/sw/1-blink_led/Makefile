@@ -1,4 +1,4 @@
-CROSS_COMPILE=/opt/riscv/bin/riscv64-unknown-elf-
+CROSS_COMPILE=riscv64-unknown-elf-
 
 CC=$(CROSS_COMPILE)gcc
 OBJCOPY=$(CROSS_COMPILE)objcopy
@@ -38,7 +38,7 @@ nmon: application.nmon
 
 application.elf: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LDLIBS) -o $@ 
-	/opt/riscv/bin/riscv64-unknown-elf-size -A -x $@
+	riscv64-unknown-elf-size -A -x $@
 
 #START_ADDR := $(shell $(NM) *.elf | awk '/ _start/ {print $$1}')
 

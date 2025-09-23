@@ -7,9 +7,9 @@
 
 #include <stdint.h>
 #include "print.h"
-#include "uart.h"
+#include "soc_uart.h"
 
-#define OUTPORT 0x10000000
+//#define OUTPORT 0x10000000
 
 void print_chr(char ch)
 {

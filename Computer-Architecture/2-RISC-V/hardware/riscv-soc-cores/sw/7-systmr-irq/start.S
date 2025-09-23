@@ -1,5 +1,5 @@
 
-#include "nanorv32.h"
+//#include "nanorv32.h"
 
 .global main
 

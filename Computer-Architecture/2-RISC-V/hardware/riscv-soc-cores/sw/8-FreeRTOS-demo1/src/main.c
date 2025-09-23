@@ -1,9 +1,10 @@
 #include "FreeRTOS.h"
 #include "task.h"
-#include "uart.h"
+#include "soc_uart.h"
+#include "soc_gpio.h"
 
 
-#define LED_PORT	( *(volatile uint32_t *) 0x91000000 )
+
 volatile unsigned char gpio_state=0;
 // Define the LED pin and toggle period
 #define BLINK1_PERIOD_MS 500
@@ -15,7 +16,7 @@ void vBlinkTask(void *pvParameters) {
     for (;;) {
         // Toggle LED (using your specific HAL functions)
         gpio_state^=0xA0;
-		LED_PORT = gpio_state;
+		GPIO0_DEV->gpio.output = gpio_state;
 		uart_puts("Blink task 1\n");
         // Delay for the blink period
         vTaskDelay(pdMS_TO_TICKS(BLINK1_PERIOD_MS));
@@ -28,7 +29,7 @@ void vBlinkTask2(void *pvParameters) {
     for (;;) {
         // Toggle LED (using your specific HAL functions)
         gpio_state^=0x0A;
-		LED_PORT = gpio_state;
+		GPIO0_DEV->gpio.output = gpio_state;
 		uart_puts("Blink task 2\n");
         // Delay for the blink period
         vTaskDelay(pdMS_TO_TICKS(BLINK2_PERIOD_MS));
@@ -37,9 +38,9 @@ void vBlinkTask2(void *pvParameters) {
 
 int main(void) {
     // System initialization (clocks, peripherals, etc.)
-	uart_init();
-	gpio_state=0xE0;
-	LED_PORT = gpio_state;
+	uart_init(115200);
+	gpio_state = 0xE;
+	GPIO0_DEV->gpio.output = gpio_state;
     // Create the LED blink task
     xTaskCreate(vBlinkTask, "Blinky1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
 	xTaskCreate(vBlinkTask2, "Blinky2", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);

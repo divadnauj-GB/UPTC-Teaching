@@ -33,7 +33,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
-#include "uart.h"
+#include "soc_uart.h"
+#include "../inc/soc_gpio.h"
 
 //#define SIMULATION
 
@@ -48,8 +49,6 @@ to ticks using the pdMS_TO_TICKS() macro. */
 #else
 #define mainQUEUE_SEND_FREQUENCY_MS			pdMS_TO_TICKS( 500 )
 #endif
-
-#define LED_PORT							( *(volatile uint32_t *) 0x91000000 )
 
 /* The maximum number items the queue can hold.  The priority of the receiving
 task is above the priority of the sending task, so the receiving task will
@@ -102,7 +101,7 @@ void main( void )
 
 		/* Light LED1 just before the scheduler is started */
 		gpio_status &= ~0x2;
-		LED_PORT = gpio_status;
+		GPIO0_DEV->gpio.output = gpio_status;
 
 		/* Start the tasks and timer running. */
 		vTaskStartScheduler();
@@ -121,9 +120,9 @@ void main( void )
 static void prvSetupHardware( void )
 {
 	// Initial LED state: LED0 is lit
-	uart_init();
+	uart_init(115200);
 	gpio_status = 0xE;
-	LED_PORT = gpio_status;
+	GPIO0_DEV->gpio.output = gpio_status;
 }
 /*-----------------------------------------------------------*/
 
@@ -147,7 +146,8 @@ BaseType_t xReturned;
 		/* This is generally unsafe, but prvQueueReceiveTask is blocked now waiting
 		to receive from queue */
 		gpio_status ^= 0x4;
-		LED_PORT = gpio_status;
+		GPIO0_DEV->gpio.output = gpio_status;
+		
 
 		/* Send to the queue - causing the queue receive task to unblock and
 		toggle the LED.  0 is used as the block time so the sending operation
@@ -184,7 +184,8 @@ const char * const pcFailMessage = "Unexpected value received\r\n";
 			/* This is generally unsafe, but prvQueueSendTask should wait long enough 
 			for the next tick */
 			gpio_status ^= 0x8; 
-			LED_PORT = gpio_status;
+			GPIO0_DEV->gpio.output = gpio_status;
+			
 
 			configPRINT_STRING( pcPassMessage );
 			ulReceivedValue = 0U;
