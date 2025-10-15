@@ -14,6 +14,9 @@ module de1_nanorv32_wb_soc(
 	output sdram_cke_pad_o,
 	output sdram_clk_pad_o,
 
+	input [7:0] SW,
+	output [7:0] LEDG,
+
 	input UART_RXD,
 	output UART_TXD
 	);
@@ -23,6 +26,11 @@ module de1_nanorv32_wb_soc(
 
 	wire sdram_clk;
 	wire sdram_rst;
+
+	wire [7:0] gpio0_o;
+	assign LEDG[7:0] = gpio0_o[7:0];
+	wire [7:0] gpio0_i;
+	assign gpio0_i[7:0] = SW[7:0];
 
 	altpll_wb_clkgen #(
 		.DEVICE_FAMILY ("Cyclone II"),
@@ -88,6 +96,9 @@ module de1_nanorv32_wb_soc(
 	soc(
 		.clock (wb_clk),
 		.reset (wb_rst),
+
+		.gpio0_i (gpio0_i),
+		.gpio0_o (gpio0_o),
 
 		.uart_rx (uart0_rx),
 		.uart_tx (uart0_tx),
