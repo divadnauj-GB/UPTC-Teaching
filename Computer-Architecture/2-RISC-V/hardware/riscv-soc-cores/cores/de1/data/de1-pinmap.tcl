@@ -182,3 +182,6 @@ set_location_assignment PIN_G16 -to GPIO_1[7]
 
 
 
+# KEY
+set_location_assignment PIN_R22 -to KEY[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to KEY[0]

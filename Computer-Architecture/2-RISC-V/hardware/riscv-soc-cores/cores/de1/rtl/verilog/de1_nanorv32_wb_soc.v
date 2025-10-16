@@ -1,5 +1,6 @@
 module de1_nanorv32_wb_soc(
 	input CLOCK_50,
+	input [3:0] KEY,
 
 	inout [7:0] GPIO_1,
 
@@ -46,7 +47,7 @@ module de1_nanorv32_wb_soc(
 	)
 	clkgen(
 		.sys_clk_pad_i (CLOCK_50),
-		.rst_n_pad_i (1),
+		.rst_n_pad_i (KEY[0]),
 
 		.wb_clk_o (wb_clk),
 		.wb_rst_o (wb_rst),
