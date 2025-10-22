@@ -20,27 +20,40 @@ This command will compile, simulate and open the waveforms using GtKwave.
 
 ### Barrel-Shifter
 
-
 ### Encoders
-
+- **binary encoder**
+- **priority encoder**
 
 ### Decoders
-
+- **bcd 7seg**
+- **decoder 2to4**
 
 ### Adders
-
+- **riple carry adder**
+- **behavioral adder**
 
 ### Multipliers
+- **array multiplier**
+- **behavioral multiplier**
 
+### Comparator
+- **unsigned comparator**
 
 ### Flip-flops
-
+- **D FF**
+- **T FF**
+- **JK FF**
 
 ### Registers
-
+- **PIPO (parallel input parallel output)**
+- **PISO (parallel input serial output)**
+- **SIPO (serial input parallel output)**
+- **SISO (serial input serial output)**
 
 ### Counters
-
+- **async counter**
+- **simple behavioural synchronous counter**
+- **parallel load counter**
 
 ### FSM
 
