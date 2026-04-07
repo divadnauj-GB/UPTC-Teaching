@@ -1,41 +1,72 @@
-nmon RISC-V nano-monitor
-========================
+# UART and GPIO drivers on NanoRV32-SoC
+This example implements the drivers/libraries to handle the GPIO and the UART on the nanorv32-SoC system. The program implements a pooling loop to check whether the UART has received any data from the PC. When the user send the 'u' character, the program increments a variable and write its value to the GPIO port. At the same time, the processor format an string and sends a message to the PC indicating the value of the counter. In addition, whne the the user send the 'd' character, the program decrements a variable executing the same visualization routines as when incrementing. 
 
-nmon is a tiny monitor (<1 KiB) program for the RISC-V processors.
+## Project structure
+The following shows the file structure of the current project.
 
-It can operate with NO working RAM at all!
+```bash
+.
+├── inc
+│   ├── nanorv32_regs.h # Core registers definitions
+│   ├── nanorv32.h      # Helper functions and definitions
+│   ├── riscv-csr.h.    # Definitions and registers of the CSR registers
+│   ├── soc_gpio.h      # Register definitions and functions for controlling GPIOs
+│   ├── soc_regs.h      # Peripherals memory map
+│   ├── soc_uart.h      # Register definitions and functions for controlling UART
+│   └── systimer.h      # Funtions and definitions for using the systimer
+├── src
+│   ├── soc_gpio.c      # GPIOs functions
+│   ├── soc_uart.c      # UART functions
+│   ├── stub_stdlib.c   # stdlib stub functions
+│   └── systimer.c      # Systimer functions
+├── main.c              # Main program
+├── start.S             # crt0 initialization of the processor before calling main function
+├── nanorv32-wb-soc.lds # Linker script memory segments definitions
+├── qemu.lds            # Linker script memory segments definitions for QEMU
+├── Makefile            # Makefile targets 
+└── nmon-loader.sh      # nanorv32-SoC programmer through UART
+```
 
-It uses only the processor registers and NS16550-compatible
-UART port for operation, so it can be used for a memory
-controller setup code debugging.
+# How to use this example
 
-nmon is based on MIPS nmon from barebox bootloader (http://www.barebox.org).
+## 1. Build the hardware SoC
 
-nmon has only 4 commands:
+1. Build the hardware and program de FPGA device
+    ```bash
+    cd UPTC-Teaching/Computer-Architecture/2-RISC-V/hardware/riscv-soc-cores/
+    conda activate fusesoc
+    fusesoc --cores-root cores/ run --build --tool quartus de1-nanorv32-wb-soc-mtvec    
+    ```
+2. Program the *.sof file to the FPGA using either the terminal or the Quartus graphical interface
+    ```bash
+    jtagconfig
+    quartus_pgm  -m jtag -o "p;build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/de1-nanorv32-wb-soc-mtvec_0.sof"
+    ```
+2. Connect the nanorv32-SoC to the PC using a USB-to-Serial converter (e.g., FT232RL), following this schematic diagram. the GPIO_0[1] must be connected to the RX pin on the USB-to-Serial converter and the GPIO_0[3] must be connected to the TX pin on the USB-to-Serial converter. The GND pin (12) must be connected to the GND pin on the USB-to-Serial converter.
 
-    q - quit
-    d <addr> - read 32-bit word from <addr> address
-    w <addr> <val> - write 32-bit word <val> to <addr>
-    g <addr> - jump to <addr>
+    -------------------------
+        .------.
+        | 1   2|  2 (GPIO_0[1]) fpga --> host
+        | 3   4|  4 (GPIO_0[3]) fpga <-- host
+        | .....|
+        |    12| 12 (GND)
+        |      |
+        |      |
+        |......|
+        |      |
+        |39  40|
+        '------'
+        GPIO0
+    -------------------------
 
-Address and data values must be given in hexadecimal.
-Everything (including hex digits 'a'..'f') must
-be in lower case.
+## Compile and program de SoC with the application
 
-EXAMPLE: change value of the 32-bit word at address ``0xa0000000``
-
-    nmon> d a0000000
-    00000000
-    nmon> w a0000000 12345678
-    nmon> d a0000000
-    12345678
-    nmon>
-
-There is no error checking of any kind. If you
-give an invalid address you will probably get
-an exception which will hang the board and you
-will have to press the reset button.
-
-You can interrupt current command (e.g. you have
-made error in input ``<addr>`` value) by pressing
-the ``<ESC>`` key.
+1. Compile the program
+    ```bash
+    cd UPTC-Teaching/Computer-Architecture/2-RISC-V/hardware/riscv-soc-cores/sw/6-uart_getc
+    make clean build nmon
+    ```
+2. Program the nanorv32-SoC with the compiled application
+    ```bash
+    expect nmon-loader.sh application.nmon /dev/ttyUSB 115200
+    ```

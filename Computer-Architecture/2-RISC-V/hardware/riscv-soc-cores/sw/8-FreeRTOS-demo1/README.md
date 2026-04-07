@@ -1,37 +1,31 @@
-# Blink Led on NanoRV32-SoC
-This example uses the LEDs connected to the GPIO output of the nanorv32-SoC. The following table shows the LED sequence implemented, the "x" mean LED OFF and "o" meand LED ON. 
-
-The transitions between sequence states takes approximately 200ms, implemented using a custom locking dealy function. 
-
-|76543210|
-|---|
-|**xxxxxxxo**|
-|**xxxxxxox**|
-|**xxxxxoxx**|
-|**xxxxoxxx**|
-|**xxxoxxxx**|
-|**xxoxxxxx**|
-|**xoxxxxxx**|
-|**oxxxxxxx**|
+# RTOS basic example NanoRV32-SoC
+This example implements a port example of FreeRTOS on nanorv32-SoC. The program creates two tasks. The first task is executed every 500ms and the second task is executed every 300ms. The tasks control a separate set of LEDs and send a message via UART during the operation.
 
 ## Project structure
-The following corresponds to the project structure the main program is located in `main.c` the `start.S` file contains the initialization file equivalent to `crt0.S` required by C programing. The file `stub_stdlib.c` incorporates the function definitions required by the `libc` library in order to enable the usage of standar C functions such as `sprintf`, `malloc` among others. 
-
-The `nanorv32-wb-soc.lds` corresponds to the linkerscript where the memoery segments are defined according to the `nanorv32-SoC` arhitecture.
-
-The `Makefile` implements the compilation targets of the program.
-
-Finally, the `nmon-loader.sh` is an script the allows to program the `nanorv32-SoC` using the UART conection, this file is independent of the program.
-
-
+The following shows the file structure of the current project.
 
 ```bash
 .
-├── main.c
-├── stub_stdlib.c
-├── start.S
-├── nanorv32-wb-soc.lds
+├── inc
+│   ├── freertos_risc_v_chip_specific_extensions.h
+│   ├── FreeRTOSConfig.h
+│   ├── nanorv32_regs.h
+│   ├── nanorv32.h
+│   ├── print.h
+│   ├── riscv-csr.h
+│   ├── soc_gpio.h
+│   ├── soc_regs.h
+│   ├── soc_uart.h
+│   └── systimer.h
+├── src
+│   ├── main.c
+│   ├── print.c
+│   ├── soc_gpio.c
+│   ├── soc_uart.c
+│   ├── start.S
+│   └── systimer.c
 ├── Makefile
+├── nanorv32-wb-soc.lds
 └── nmon-loader.sh
 ```
 
@@ -68,13 +62,17 @@ Finally, the `nmon-loader.sh` is an script the allows to program the `nanorv32-S
     -------------------------
 
 ## Compile and program de SoC with the application
-
-1. Compile the program
+1. Pull the FreeRTOS main repository
     ```bash
-    cd UPTC-Teaching/Computer-Architecture/2-RISC-V/hardware/riscv-soc-cores/sw/1-blink_led
+    cd UPTC-Teaching/Computer-Architecture/2-RISC-V/hardware/riscv-soc-cores/sw/8-FreeRTOS-demo1
+    git submodule update --recursive
+    ```
+2. Compile the program
+    ```bash
+    cd UPTC-Teaching/Computer-Architecture/2-RISC-V/hardware/riscv-soc-cores/sw/7-systmr-irq
     make clean build nmon
     ```
-2. Program the nanorv32-SoC with the compiled application
+3. Program the nanorv32-SoC with the compiled application
     ```bash
     expect nmon-loader.sh application.nmon /dev/ttyUSB 115200
     ```

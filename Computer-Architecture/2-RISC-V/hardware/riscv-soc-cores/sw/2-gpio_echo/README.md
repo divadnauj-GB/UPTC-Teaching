@@ -1,41 +1,67 @@
-nmon RISC-V nano-monitor
-========================
+# GPIO echo on NanoRV32-SoC
+This example reads the GPIO input and then send it to the GPIO output. The GPIO input is connected to the switched (SW) on the DE1 FPGA board and the GPIO output is connected to the Red LEDs on the DE1 FPGA board.
 
-nmon is a tiny monitor (<1 KiB) program for the RISC-V processors.
+## Project structure
+The following corresponds to the project structure the main program is located in `main.c` the `start.S` file contains the initialization file equivalent to `crt0.S` required by C programing. The file `stub_stdlib.c` incorporates the function definitions required by the `libc` library in order to enable the usage of standar C functions such as `sprintf`, `malloc` among others. 
 
-It can operate with NO working RAM at all!
+The `nanorv32-wb-soc.lds` corresponds to the linkerscript where the memoery segments are defined according to the `nanorv32-SoC` arhitecture.
 
-It uses only the processor registers and NS16550-compatible
-UART port for operation, so it can be used for a memory
-controller setup code debugging.
+The `Makefile` implements the compilation targets of the program.
 
-nmon is based on MIPS nmon from barebox bootloader (http://www.barebox.org).
+Finally, the `nmon-loader.sh` is an script the allows to program the `nanorv32-SoC` using the UART conection, this file is independent of the program.
 
-nmon has only 4 commands:
 
-    q - quit
-    d <addr> - read 32-bit word from <addr> address
-    w <addr> <val> - write 32-bit word <val> to <addr>
-    g <addr> - jump to <addr>
 
-Address and data values must be given in hexadecimal.
-Everything (including hex digits 'a'..'f') must
-be in lower case.
+```bash
+.
+├── main.c
+├── stub_stdlib.c
+├── start.S
+├── nanorv32-wb-soc.lds
+├── Makefile
+└── nmon-loader.sh
+```
 
-EXAMPLE: change value of the 32-bit word at address ``0xa0000000``
+# How to use this example
 
-    nmon> d a0000000
-    00000000
-    nmon> w a0000000 12345678
-    nmon> d a0000000
-    12345678
-    nmon>
+## 1. Build the hardware SoC
 
-There is no error checking of any kind. If you
-give an invalid address you will probably get
-an exception which will hang the board and you
-will have to press the reset button.
+1. Build the hardware and program de FPGA device
+    ```bash
+    cd UPTC-Teaching/Computer-Architecture/2-RISC-V/hardware/riscv-soc-cores/
+    conda activate fusesoc
+    fusesoc --cores-root cores/ run --build --tool quartus de1-nanorv32-wb-soc-mtvec    
+    ```
+2. Program the *.sof file to the FPGA using either the terminal or the Quartus graphical interface
+    ```bash
+    jtagconfig
+    quartus_pgm  -m jtag -o "p;build/de1-nanorv32-wb-soc-mtvec_0/default-quartus/de1-nanorv32-wb-soc-mtvec_0.sof"
+    ```
+2. Connect the nanorv32-SoC to the PC using a USB-to-Serial converter (e.g., FT232RL), following this schematic diagram. the GPIO_0[1] must be connected to the RX pin on the USB-to-Serial converter and the GPIO_0[3] must be connected to the TX pin on the USB-to-Serial converter. The GND pin (12) must be connected to the GND pin on the USB-to-Serial converter.
 
-You can interrupt current command (e.g. you have
-made error in input ``<addr>`` value) by pressing
-the ``<ESC>`` key.
+    -------------------------
+        .------.
+        | 1   2|  2 (GPIO_0[1]) fpga --> host
+        | 3   4|  4 (GPIO_0[3]) fpga <-- host
+        | .....|
+        |    12| 12 (GND)
+        |      |
+        |      |
+        |......|
+        |      |
+        |39  40|
+        '------'
+        GPIO0
+    -------------------------
+
+## Compile and program de SoC with the application
+
+1. Compile the program
+    ```bash
+    cd UPTC-Teaching/Computer-Architecture/2-RISC-V/hardware/riscv-soc-cores/sw/2-gpio_echo
+    make clean build nmon
+    ```
+2. Program the nanorv32-SoC with the compiled application
+    ```bash
+    expect nmon-loader.sh application.nmon /dev/ttyUSB 115200
+    ```
