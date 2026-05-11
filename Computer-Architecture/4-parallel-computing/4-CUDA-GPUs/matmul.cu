@@ -7,18 +7,6 @@
 #define N 1000
 #define K 300
 
-
-
-void cpu_MatMul(float *A, float *B, float *C, int m, int n, int k){
-    for(int row=0; row<m; row++){
-        for (int col=0; col<n; col++){
-            for (int ii = 0; ii < k; ii++) {
-                C[row * n + col] += A[row * k + ii] * B[ii * n + col];
-            }
-        }
-    }
-}
-
 /**
  * Sample CUDA device function which adds an element from array A and array B.
  *
@@ -32,8 +20,6 @@ __global__ void MatMul(float *A, float *B, float *C, int M, int N, int K){
         }
     }
 }
-
-
 
 /**
  * Wrapper function for the CUDA kernel function.
@@ -56,6 +42,17 @@ void kernel(float *A, float *B, float *C, int M, int N, int K) {
     MatMul<<<gridSize, blockSize>>>(d_A, d_B, d_C, M, N, K);
     //cudaDeviceSynchronize();
     cudaMemcpy(C, d_C, M*N*sizeof(float), cudaMemcpyDeviceToHost);
+}
+
+
+void cpu_MatMul(float *A, float *B, float *C, int m, int n, int k){
+    for(int row=0; row<m; row++){
+        for (int col=0; col<n; col++){
+            for (int ii = 0; ii < k; ii++) {
+                C[row * n + col] += A[row * k + ii] * B[ii * n + col];
+            }
+        }
+    }
 }
 
 
