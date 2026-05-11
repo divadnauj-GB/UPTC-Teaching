@@ -11,12 +11,13 @@
  * Sample CUDA device function which adds an element from array A and array B.
  *
  */
-__global__ void MatMul(float *A, float *B, float *C, int M, int N, int K){
+__global__ void MatMul(float *A, float *B, float *C, int Mn, int Nn, int Kn) 
+{
     int row = blockIdx.y*blockDim.y + threadIdx.y;
     int col = blockIdx.x*blockDim.x + threadIdx.x;
-    if (row<M && col<N){
-        for (int ii = 0; ii < K; ii++) {
-            C[row * N + col] += A[row * K + ii] * B[ii * N + col];
+    if (row<Mn && col<Nn){
+        for (int ii = 0; ii < Kn; ii++) {
+            C[row * Nn + col] += A[row * Kn + ii] * B[ii * Nn + col];
         }
     }
 }
@@ -24,7 +25,7 @@ __global__ void MatMul(float *A, float *B, float *C, int M, int N, int K){
 /**
  * Wrapper function for the CUDA kernel function.
  */
-void kernel(float *A, float *B, float *C, int M, int N, int K) {
+void kernel(float *A, float *B, float *C, int Mn, int Nn, int Kn) {
     // Launch CUDA kernel.
     float *d_A, *d_B, *d_C;
     cudaMalloc((void**) &d_A, M*K*sizeof(float));
@@ -39,7 +40,7 @@ void kernel(float *A, float *B, float *C, int M, int N, int K) {
     dim3 gridSize(ceil(((float)N)/blockSize.x), 
                   ceil(((float)M)/blockSize.y));
 
-    MatMul<<<gridSize, blockSize>>>(d_A, d_B, d_C, M, N, K);
+    MatMul<<<gridSize, blockSize>>>(d_A, d_B, d_C, Mn, Nn, Kn);
     //cudaDeviceSynchronize();
     cudaMemcpy(C, d_C, M*N*sizeof(float), cudaMemcpyDeviceToHost);
 }
